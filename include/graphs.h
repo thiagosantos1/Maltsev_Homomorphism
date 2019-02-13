@@ -17,16 +17,21 @@
 
 #include <stdio.h>  
 #include <stdlib.h>
-#include <string.h> 
+#include <string.h>  
 #include <unistd.h>
 #include <math.h>
 
+
+typedef 
+  signed char
+uchar;
 
 typedef struct graphdata {
 
   uchar ** graph_g;
   uchar ** graph_h;
   uchar ** list_G2H; // Vertices available in H for each V in G
+  uchar **** pair_list_G2H; // pair list aboung vertices in G for a mapping in H
 
   int *degrees_g; // Degrees of each vertex in G
   int *degrees_h; // Degrees of each vertex in H
@@ -43,9 +48,10 @@ typedef struct graphdata {
 typedef struct userdata {
   char *graph_g;  // Graph G file name
   char *graph_h;  // Graph H file name
-  char *list;     // List os possible assignments from G to H
+  char *list_homom;     // List os possible assignments from G to H
 
 } USER_PARAMS;
 
 /* Read graphs and the list in the class readgraphs.c, by reading all the files set by the user in user params*/
-void read_graphs(GRAPH *op, USER_PARAMS *ip);
+void read_graphs(GRAPHS *op, USER_PARAMS *ip);
+
