@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-
+ 
 
 int odd_Even_bits ( int x)
 {
@@ -217,6 +217,7 @@ void save_list_G2H(GRAPHS *op, USER_PARAMS * ip)
   fclose (fp_list); 
 
 }
+
 
 
 

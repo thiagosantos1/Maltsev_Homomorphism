@@ -32,6 +32,7 @@ typedef struct graphdata {
   uchar ** graph_h;
   uchar ** list_G2H; // Vertices available in H for each V in G
   uchar **** pair_list_G2H; // pair list aboung vertices in G for a mapping in H
+  uchar * activeG;  // Active vertices in G - Subgraph of G
 
   int *degrees_g; // Degrees of each vertex in G
   int *degrees_h; // Degrees of each vertex in H
@@ -53,5 +54,12 @@ typedef struct userdata {
 } USER_PARAMS;
 
 /* Read graphs and the list in the class readgraphs.c, by reading all the files set by the user in user params*/
-void read_graphs(GRAPHS *op, USER_PARAMS *ip);
+void init_graphs_lists(GRAPHS *op, USER_PARAMS *ip, int read_g);
+
+/* Creates Graph H based on Graph G. Also creates the list homomosphism */
+void create_list_G2H(GRAPHS *op, USER_PARAMS * ip);
+
+int run_maltsev(GRAPHS *op); 
+
+
 

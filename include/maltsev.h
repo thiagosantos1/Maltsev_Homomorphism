@@ -2,7 +2,8 @@
 
 /***************************************************************************
 * This class is designed to have all the information about the class
-* graphsconstruct.h, as well with more information about what each method does.
+* maltsev.h, as well with more information about what each method does.
+* This is the main class, with all methods for our maltsev algorithm
 *
 * The Idea of this implementation is to solve linear equations, using 
 * Graph and Maltsev theory. After appling the theory, the graph and
@@ -12,17 +13,17 @@
 * Copyright (C)
 *
 ****************************************************************************/
- 
 
-int odd_Even_bits(int x);
+// main method. This is where we call all other methods, to solve our problem
+// This is the only available method to main
+int run_maltsev(GRAPHS *op);
 
-int which_neighbor(GRAPHS *op, int x, int y);
+int pre_processing(GRAPHS *op);
 
-int which_bit(int l, int i );
+int is_rectangle(GRAPHS *op, int x, int a, int b);
 
-// Function to create Graph H based on Graph G and its list as well
-void create_list_G2H(GRAPHS *op, USER_PARAMS * ip);
+void print_instance(GRAPHS *op, int x, int a, int current);
 
-void save_list_G2H(GRAPHS *op, USER_PARAMS * ip);
+int Pruning_the_lists(GRAPHS *op);
 
-
+void print_pairs(GRAPHS *op);

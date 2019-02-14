@@ -7,10 +7,12 @@
 
 
 // if already have all graphs and list saved
-void read_graphs(GRAPHS *op, USER_PARAMS * ip)
-{
+void init_graphs_lists(GRAPHS *op, USER_PARAMS * ip, int read_g)
+{ 
+  // if we are create new H and list, we already have read graph G
+  if(read_g >0)
+    init_graph_g(op,ip->graph_g);
 
-  init_graph_g(op,ip->graph_g);
   init_graph_h(op,ip->graph_h);
   init_list(op,ip->list_homom); 
   init_pair_list(op);
@@ -39,12 +41,20 @@ void init_graph_g(GRAPHS *op, char * file_name)
   // initialize degrees to zero
   op->degrees_g = (int *)calloc(op->num_vert_G, sizeof(int)); 
 
-  while( (fscanf(fp, "%s %s", str1,str2)) ==2){
+
+  for (int x=0; x< op->num_E_G; x++) {
+    fscanf(fp, "%s %s", str1,str2);
     i = atoi(str1);
     j = atoi(str2);
     op->graph_g[i][j] = 1;
     op->degrees_g[i]++;
   }
+
+  // Set all nodes to active/availave. 
+  op->activeG = malloc(op->num_vert_G * sizeof(uchar));
+  memset(op->activeG,1,op->num_vert_G);
+
+
 
 }
 
@@ -70,7 +80,8 @@ void init_graph_h(GRAPHS *op, char * file_name)
   // initialize degrees to zero
   op->degrees_h = (int*) calloc(op->num_vert_H, sizeof(int));
 
-  while( (fscanf(fp, "%s %s", str1,str2)) ==2){
+  for (int x=0; x< op->num_E_G; x++) {
+    fscanf(fp, "%s %s", str1,str2);
     i = atoi(str1);
     j = atoi(str2);
     op->graph_h[i][j] = 1;
@@ -86,7 +97,7 @@ void init_list(GRAPHS *op, char * file_name)
     fprintf(stderr, "\nError opening file %s\n",file_name );
     exit(0);
   }
-  
+
   int i,x,y,b,counter;
   op->list_G2H = malloc(op->num_vert_G * sizeof(uchar *));
   for(i=0; i<op->num_vert_G; i++){
