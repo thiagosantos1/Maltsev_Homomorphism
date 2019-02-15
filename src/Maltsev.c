@@ -8,6 +8,7 @@
 
 int run_maltsev(GRAPHS *op)
 {
+  
   int out=pre_processing(op);
   print_pairs(op);
 

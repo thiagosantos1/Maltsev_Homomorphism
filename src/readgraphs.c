@@ -17,6 +17,11 @@ void init_graphs_lists(GRAPHS *op, USER_PARAMS * ip, int read_g)
   init_list(op,ip->list_homom); 
   init_pair_list(op);
 
+  // print_graphH(op);
+  // print_graphG(op);
+  // print_list(op);
+  // print_init_pairs(op);
+
 }
 
 void init_graph_g(GRAPHS *op, char * file_name)
@@ -80,7 +85,7 @@ void init_graph_h(GRAPHS *op, char * file_name)
   // initialize degrees to zero
   op->degrees_h = (int*) calloc(op->num_vert_H, sizeof(int));
 
-  for (int x=0; x< op->num_E_G; x++) {
+  for (int x=0; x< op->num_E_H; x++) {
     fscanf(fp, "%s %s", str1,str2);
     i = atoi(str1);
     j = atoi(str2);
@@ -105,14 +110,12 @@ void init_list(GRAPHS *op, char * file_name)
     memset(op->list_G2H[i],0,op->num_vert_H);
   }
 
-  for (x=0; x < op->num_vert_G; x++) // assume everyone has a none-empty list 
-  {
+  for (x=0; x < op->num_vert_G; x++){ // assume everyone has a none-empty list 
     
     fscanf(fp,"%d",&y); // the first one from G; 
     fscanf (fp,"%d",&counter); // how many in the list of y 
     op->list_G2H[y][0]=counter; 
-    for (i=0; i < counter; i++)
-    {   
+    for (i=0; i < counter; i++){   
       fscanf (fp,"%d",&b);   // b is the element to be in L1(y) 
       op->list_G2H[y][i+1]=b;
     }  
@@ -194,8 +197,68 @@ void init_pair_list(GRAPHS *op)
 
     }
   }
-  
 
+}
+
+void print_init_pairs(GRAPHS *op)
+{
+  int x,y,a,b;
+  printf("Pairs\n");
+  for (x=0; x< op->num_vert_G ; x++){ 
+    for (y=0; y< op->num_vert_G ; y++){ 
+      //printf("L(%d )=",x);
+      printf("L(%d,%d)=",x,y);
+      for (a=0; a< op->num_vert_H; a++) 
+        for (b=0; b< op->num_vert_H; b++) 
+          if ( op->pair_list_G2H[x][y][a][b] >0)
+            printf("{%d,%d},",a,b);
+      printf("\n");
+    }
+  }
+  printf("\n\n"); 
+}
+
+void print_graphG(GRAPHS *op)
+{
+  printf("Graph G\n");
+  printf("Num V: %d\tNum of E:%d\n", op->num_vert_G, op->num_E_G);
+  int x,y;
+  for (x=0; x< op->num_vert_G ; x++){ 
+    for (y=0; y< op->num_vert_G ; y++){ 
+      if(op->graph_g[x][y] >0)
+        printf("%d %d\n", x,y );
+    }
+  }
+  printf("\n\n");
+}
+
+void print_graphH(GRAPHS *op)
+{
+  printf("Graph H\n");
+  printf("Num V: %d\tNum of E:%d\n", op->num_vert_H, op->num_E_H);
+  int x,y;
+  for (x=0; x< op->num_vert_H ; x++){ 
+    for (y=0; y< op->num_vert_H ; y++){ 
+      if(op->graph_h[x][y] >0)
+        printf("%d %d\n", x,y );
+    }
+  }
+  printf("\n\n");
+}
+
+void print_list(GRAPHS *op)
+{
+
+  int x,i;
+  printf("List\n");
+  for (x=0; x < op->num_vert_G; x++){
+    printf("List for V: %d\n{ ",x );
+    for (i=0; i < op->list_G2H[x][0]; i++){   
+      printf("%d, ",op->list_G2H[x][i+1]);
+    }
+    printf("}\n");  
+  }
+  printf("\n\n");
 }
 
 
