@@ -25,12 +25,12 @@ After appling the theory, the graph and its list left can be used to find a solu
     * This is the main class. Once you have all graphs, list & pairs loaded, we can use this class and its methods to run our maltsev algorithm.
     * Here is where we do the pre-processing of the graph, reducing the list of each Vertex by doing pair consistency.
 
-## How to use the code
-  There's a makefile in the folder src, which helps the process.
+# How to use the code
+  There's a Makefile in the folder src, which helps the process.
   
-  # How to compile, if needed
+  **How to compile, if needed
   inside of the folder src, you can run the command "make" in your terminal
   
-  # How to run the code
+  **How to run the code
   Considering that Graphs G & H and the list is saved in the folder etc, you can simply run by typing "make run" into your terminal
   
