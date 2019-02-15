@@ -3,7 +3,7 @@
 The Idea of this implementation is to solve linear equations, using Graph and Maltsev theory. 
 After appling the theory, the graph and its list left can be used to find a solution for the linear equation Using Homomorphism.
 
-# Functiolaity of each Class
+# Functionality of each Class
   * main
     * As the name says, its the main class.
     * It's where we define names of files to be used and its path.
