@@ -32,5 +32,5 @@ After appling the theory, the graph and its list left can be used to find a solu
   inside of the folder src, you can run the command "make" in your terminal
   
   # How to run the code
-  Considering that Graphs G & H and the list is saved in the folder etc, you can simply run by typing "make run" into your terminal
+  Considering Graphs G & H and the list is saved in the folder etc, you can simply run by typing "make run" into your terminal
   
