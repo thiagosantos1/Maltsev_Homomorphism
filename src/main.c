@@ -7,9 +7,11 @@
 * to make our graph and its aditional informations
 * 
 * Copyright (C)
-*
+* 
 ****************************************************************************/
 
+#include <stdio.h>
+#include <stdlib.h>
 #include <graphs.h> 
 
 int main(int argc, char const *argv[])
@@ -26,8 +28,8 @@ int main(int argc, char const *argv[])
   userpar.list_homom = "../etc/list_file.txt";
 
 
-  // you can set manually create_new_H = 1 or pass anything as argv to be as a flag indicating create new H.
-  if(create_new_H >0 || argc > 2){
+  // you can set manually create_new_H = 1
+  if(create_new_H >0){
     create_list_G2H(&graphs, &userpar );
     init_graphs_lists(&graphs, &userpar, 0 );
   }

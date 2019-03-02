@@ -32,5 +32,10 @@ After appling the theory, the graph and its list left can be used to find a solu
   inside of the folder src, you can run the command "make" in your terminal
   
   # How to run the code
-  Considering Graphs G & H and the list is saved in the folder etc, you can simply run by typing "make run" into your terminal
+  * Run with files in folder etc? 
+    * Considering Graphs G & H and the list is saved in the folder etc, you can simply run by typing "make run" into your terminal
+
+  * Run by creating a new instance of H?
+    *  In main.c, side of folder src, change the value of the variable create_new_H to be  = 1. compile again(make) and then run it(make run)
+
   

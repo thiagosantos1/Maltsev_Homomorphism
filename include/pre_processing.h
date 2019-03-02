@@ -2,8 +2,8 @@
 
 /***************************************************************************
 * This class is designed to have all the information about the class
-* maltsev.h, as well with more information about what each method does.
-* This is the main class, with all methods for our maltsev algorithm
+* pre-processing, as well with more information about what each method does.
+* The idea is to run arc and pair consistency between graphs G & H.
 *
 * The Idea of this implementation is to solve linear equations, using 
 * Graph and Maltsev theory. After appling the theory, the graph and
@@ -14,14 +14,8 @@
 *
 ****************************************************************************/
 
-// main method. This is where we call all other methods, to solve our problem
-// This is the only available method to main
-int run_maltsev(GRAPHS *op);
 
-int is_rectangle(GRAPHS *op, int x, int a, int b);
+int pre_process(GRAPHS *op);
+void arc_consistency(GRAPHS *op);
+int pair_consistency(GRAPHS *op);
 
-void print_instance(GRAPHS *op, int x, int a, int current);
-
-int Pruning_the_lists(GRAPHS *op);
-
-void print_pairs(GRAPHS *op);
