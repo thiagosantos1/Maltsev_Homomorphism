@@ -78,9 +78,9 @@ void create_list_G2H(GRAPHS *op, USER_PARAMS * ip)
   }  
 
 
-  op->list_G2H = malloc(op->num_vert_G * sizeof(uchar *));
+  op->list_G2H = malloc(op->num_vert_G * sizeof(int *));
   for(i=0; i<op->num_vert_G; i++){
-    op->list_G2H[i] = malloc(op->num_vert_H * sizeof(uchar));
+    op->list_G2H[i] = malloc(op->num_vert_H * sizeof(int));
     memset(op->list_G2H[i],0,op->num_vert_H);
   }
 

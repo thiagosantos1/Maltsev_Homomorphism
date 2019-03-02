@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <graphs.h> 
+#include <maltsev.h>
 
 int main(int argc, char const *argv[])
 { 
@@ -37,9 +38,15 @@ int main(int argc, char const *argv[])
     init_graphs_lists(&graphs, &userpar, 1 ); // reads graphs H and G and its list. Also, creates pairs list
 
 
-  int out_put = run_maltsev(&graphs);
+  int out_maltsev = run_maltsev(&graphs);
 
-  printf("the output is %d \n", out_put); 
+  if (out_maltsev==0) 
+    printf("there is no Maltsev \n");
+  else if (out_maltsev > 1 ){  
+    printf("there is no unique Maltsev solution \n");
+    print_distinguisher(&graphs);
+  }else if ( out_maltsev==1) 
+    printf("there is a  Maltsev \n");
 
   return 0;
 

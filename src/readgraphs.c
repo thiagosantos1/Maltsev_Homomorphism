@@ -37,9 +37,9 @@ void init_graph_g(GRAPHS *op, char * file_name)
   op->num_vert_G = atoi(str1);
   op->num_E_G = atoi(str2);
 
-  op->graph_g = malloc(op->num_vert_G * sizeof(uchar *));
+  op->graph_g = malloc(op->num_vert_G * sizeof(int *));
   for(i=0; i<op->num_vert_G; i++){
-    op->graph_g[i] = malloc(op->num_vert_G * sizeof(uchar));
+    op->graph_g[i] = malloc(op->num_vert_G * sizeof(int));
     memset(op->graph_g[i],0,op->num_vert_G);
   }
 
@@ -56,7 +56,7 @@ void init_graph_g(GRAPHS *op, char * file_name)
   }
 
   // Set all nodes to active/availave. 
-  op->activeG = malloc(op->num_vert_G * sizeof(uchar));
+  op->activeG = malloc(op->num_vert_G * sizeof(int));
   memset(op->activeG,1,op->num_vert_G);
 
 
@@ -76,9 +76,9 @@ void init_graph_h(GRAPHS *op, char * file_name)
   op->num_vert_H = atoi(str1);
   op->num_E_H = atoi(str2);
 
-  op->graph_h = malloc(op->num_vert_H * sizeof(uchar *));
+  op->graph_h = malloc(op->num_vert_H * sizeof(int *));
   for(i=0; i<op->num_vert_H; i++){
-    op->graph_h[i] = malloc(op->num_vert_H * sizeof(uchar));
+    op->graph_h[i] = malloc(op->num_vert_H * sizeof(int));
     memset(op->graph_h[i],0,op->num_vert_H);
   }
 
@@ -104,9 +104,9 @@ void init_list(GRAPHS *op, char * file_name)
   }
 
   int i,x,y,b,counter;
-  op->list_G2H = malloc(op->num_vert_G * sizeof(uchar *));
+  op->list_G2H = malloc(op->num_vert_G * sizeof(int *));
   for(i=0; i<op->num_vert_G; i++){
-    op->list_G2H[i] = malloc(op->num_vert_H * sizeof(uchar));
+    op->list_G2H[i] = malloc(op->num_vert_H * sizeof(int));
     memset(op->list_G2H[i],0,op->num_vert_H);
   }
 
@@ -129,19 +129,19 @@ void init_pair_list(GRAPHS *op)
   int temp_a,temp_b;
 
   // allocate memory for pair lists 
-  op->pair_list_G2H = (uchar ****) malloc(op->num_vert_G * sizeof(uchar *)); 
+  op->pair_list_G2H = (int ****) malloc(op->num_vert_G * sizeof(int *)); 
   for (x=0; x< op->num_vert_G; x++)
-    op->pair_list_G2H[x]= (uchar ***) malloc(op->num_vert_G * sizeof(uchar *)); 
+    op->pair_list_G2H[x]= (int ***) malloc(op->num_vert_G * sizeof(int *)); 
   
   
   for (x=0; x< op->num_vert_G; x++)
     for (y=0; y<op->num_vert_G; y++)
-      op->pair_list_G2H[x][y]=(uchar **) malloc(op->num_vert_H * sizeof(uchar *)); 
+      op->pair_list_G2H[x][y]=(int **) malloc(op->num_vert_H * sizeof(int *)); 
   
   for (x=0; x< op->num_vert_G; x++)
     for (y=0; y<op->num_vert_G; y++)
       for (a=0; a < op->num_vert_H; a++)
-        op->pair_list_G2H[x][y][a]=(uchar *) malloc(op->num_vert_H * sizeof(uchar *));
+        op->pair_list_G2H[x][y][a]=(int *) malloc(op->num_vert_H * sizeof(int *));
 
 
   // initially everything is zero 

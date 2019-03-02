@@ -10,7 +10,7 @@
 * Graph and Maltsev theory. After appling the theory, the graph and
 * its list left can be used to find a solution for the linear equation
 * Using Homomorphism.
-* 
+*  
 * Copyright (C)
 *
 ****************************************************************************/
@@ -21,18 +21,18 @@
 #include <unistd.h>
 #include <math.h>
 
-
 typedef 
   signed char
 uchar;
 
 typedef struct graphdata {
 
-  uchar ** graph_g;
-  uchar ** graph_h;
-  uchar ** list_G2H; // Vertices available in H for each V in G
-  uchar **** pair_list_G2H; // pair list aboung vertices in G for a mapping in H
-  uchar * activeG;  // Active vertices in G - Subgraph of G
+  int ** graph_g;
+  int ** graph_h;
+  int ** list_G2H; // L1 -  Vertices available in H for each V in G
+  int **** pair_list_G2H; // L2 - pair list aboung vertices in G for a mapping in H
+  int ***** distinguisher; // Dis - used to reduce/pair consitency. The output is a smaller word of options for the optimal solution
+  int * activeG;  // Active vertices in G - Subgraph of G
 
   int *degrees_g; // Degrees of each vertex in G
   int *degrees_h; // Degrees of each vertex in H

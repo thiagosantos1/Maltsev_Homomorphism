@@ -25,3 +25,13 @@ void print_instance(GRAPHS *op, int x, int a, int current);
 int Pruning_the_lists(GRAPHS *op);
 
 void print_pairs(GRAPHS *op);
+
+void init_distinguisher(GRAPHS *op);
+
+void print_distinguisher(GRAPHS *op);
+
+void make_choice_distinguisher(GRAPHS *op);
+
+void run_distinguisher(GRAPHS *op);
+
+int check_maltsev(GRAPHS *op);
