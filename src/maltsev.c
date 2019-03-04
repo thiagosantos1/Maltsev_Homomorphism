@@ -116,6 +116,27 @@ void print_pairs(GRAPHS *op)
 }
 
 
+void print_distinguisher(GRAPHS *op)
+{
+  int x,a,b,c,d;
+  for (x=0; x < op->num_vert_G; x++){
+    for (a=0; a< op->list_G2H[x][0]; a++){
+      for (b=0; b< op->list_G2H[x][0]; b++){
+        for( c=0; c< op->list_G2H[x][0]; c++ ){
+          if ( op->list_G2H[x][a+1] > -1 && op->list_G2H[x][b+1] > -1 && op->list_G2H[x][c+1] > -1 ){
+            printf("Dis[%d][%d][%d][%d] : ",x,op->list_G2H[x][a+1],op->list_G2H[x][b+1],op->list_G2H[x][c+1]);
+            for (d=1; d<= op->distinguisher[x][a][b][c][0] ; d++){ 
+              if ( op->distinguisher[x][a][b][c][d] > -1 )
+                printf("%d ",op->distinguisher[x][a][b][c][d]);
+            }
+            printf("\n");
+          }
+        }
+      }
+    }
+  }  
+}
+
 void init_distinguisher(GRAPHS *op)
 {
   int x,a,b,c,d;
@@ -161,27 +182,55 @@ void init_distinguisher(GRAPHS *op)
    
 }
 
-void print_distinguisher(GRAPHS *op)
+void arc_consistency_dis(GRAPHS *op)
 {
-  int x,a,b,c,d;
+
+  int x,y,a,b,c,d,e,i_a,i_b,i_c,i_e; 
+  int f,g,i_f,i_g,l,i_l,flag1,ind; 
+   
   for (x=0; x < op->num_vert_G; x++){
-    for (a=0; a< op->list_G2H[x][0]; a++){
-      for (b=0; b< op->list_G2H[x][0]; b++){
-        for( c=0; c< op->list_G2H[x][0]; c++ ){
-          if ( op->list_G2H[x][a+1] > -1 && op->list_G2H[x][b+1] > -1 && op->list_G2H[x][c+1] > -1 ){
-            printf("Dis[%d][%d][%d][%d] : ",x,op->list_G2H[x][a+1],op->list_G2H[x][b+1],op->list_G2H[x][c+1]);
-            for (d=1; d<= op->distinguisher[x][a][b][c][0] ; d++){ 
-              if ( op->distinguisher[x][a][b][c][d] > -1 )
-                printf("%d ",op->distinguisher[x][a][b][c][d]);
+    for (a=0; a < op->list_G2H[x][0]; a++){
+      for (b=0; b < op->list_G2H[x][0]; b++){
+        for (c=0; c < op->list_G2H[x][0]; c++){
+          i_a=op->list_G2H[x][a+1]; 
+          i_b=op->list_G2H[x][b+1]; 
+          i_c=op->list_G2H[x][c+1]; 
+          if (op->list_G2H[x][a+1] > -1 && op->list_G2H[x][b+1] > -1 && op->list_G2H[x][c+1] > -1 ){    
+            for (d=1; d <=op->distinguisher[x][a][b][c][0]; d++ ){
+              ind=  op->distinguisher[x][a][b][c][d];
+              if ( ind > -1 ){      
+                for (y=0; y < op->num_vert_G; y++){  
+                  if ( y != x){
+                    for (e =0; e < op->list_G2H[y][0]; e++){
+                      for (f =0; f < op->list_G2H[y][0]; f++){
+                        for (g =0; g < op->list_G2H[y][0]; g++){
+                          i_e=op->list_G2H[y][e+1]; i_f=op->list_G2H[y][f+1]; i_g=op->list_G2H[y][g+1];
+                          if (op->list_G2H[y][e+1] > -1 && op->list_G2H[y][f+1] > -1 && op->list_G2H[y][g+1] > -1 ){
+                            if (op->pair_list_G2H[x][y][i_a][i_e] && op->pair_list_G2H[x][y][i_b][i_f] && op->pair_list_G2H[x][y][i_c][i_g]){
+                              flag1=0;                      
+                              for ( l=1; l <= op->distinguisher[y][e][f][g][0]; l++){
+                                i_l=op->distinguisher[y][e][f][g][l];
+                                if ( i_l > -1 && op->pair_list_G2H[x][y][ind][i_l])   
+                                  flag1=1; 
+                              }
+                              if (!flag1) 
+                                op->distinguisher[x][a][b][c][d]=-1;
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             }
-            printf("\n");
           }
         }
       }
     }
-  }  
-}
+  }
 
+}
 
 void run_distinguisher(GRAPHS *op)
 {
@@ -272,51 +321,51 @@ void run_distinguisher(GRAPHS *op)
       }
     }
   }    
-  
 
   // Third rounds of eliminations (Arc consistency between distinguisher of (x,a,b,c) and (y,a',b',c') xy is not necessarily an edge)    
-  
-  int ind,f,g,i_f,i_g,l,i_l,flag1; 
-  for (x=0; x < op->num_vert_G; x++){
-    for (a=0; a < op->list_G2H[x][0]; a++){
-      for (b=0; b < op->list_G2H[x][0]; b++){
-        for (c=0; c < op->list_G2H[x][0]; c++){
-          i_a=op->list_G2H[x][a+1]; i_b=op->list_G2H[x][b+1]; i_c=op->list_G2H[x][c+1]; 
-          if (op->list_G2H[x][a+1] > -1 && op->list_G2H[x][b+1] > -1 && op->list_G2H[x][c+1] > -1 ){
-            for (d=1; d <=op->distinguisher[x][a][b][c][0]; d++ ){
-              ind=  op->distinguisher[x][a][b][c][d];
-              if ( ind > -1 ){      
-                for (y=0; y < op->num_vert_G; y++){  
-                  if ( y != x){
-                    for (e =0; e < op->list_G2H[y][0]; e++){
-                      for (f =0; f < op->list_G2H[y][0]; f++){
-                        for (g =0; g < op->list_G2H[y][0]; g++){  
-                          i_e=op->list_G2H[y][e+1]; i_f=op->list_G2H[y][f+1]; i_g=op->list_G2H[y][g+1];
-                          if (op->list_G2H[y][e+1] > -1 && op->list_G2H[y][f+1] > -1 && op->list_G2H[y][g+1] > -1 ){
-                            if (op->pair_list_G2H[x][y][i_a][i_e] && op->pair_list_G2H[x][y][i_b][i_f] && op->pair_list_G2H[x][y][i_c][i_g]){
-                              flag1=0;  
-                              for ( l=1; l <= op->distinguisher[y][e][f][g][0]; l++){   
-                                i_l=op->distinguisher[y][e][f][g][l];
-                                if ( i_l > -1 && op->pair_list_G2H[x][y][ind][i_l])   
-                                  flag1=1; 
-                              }
+  arc_consistency_dis(op);
 
-                              if (!flag1) 
-                                op->distinguisher[x][a][b][c][d]=-1;
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }               
+  // int ind,f,g,i_f,i_g,l,i_l,flag1; 
+  // for (x=0; x < op->num_vert_G; x++){
+  //   for (a=0; a < op->list_G2H[x][0]; a++){
+  //     for (b=0; b < op->list_G2H[x][0]; b++){
+  //       for (c=0; c < op->list_G2H[x][0]; c++){
+  //         i_a=op->list_G2H[x][a+1]; i_b=op->list_G2H[x][b+1]; i_c=op->list_G2H[x][c+1]; 
+  //         if (op->list_G2H[x][a+1] > -1 && op->list_G2H[x][b+1] > -1 && op->list_G2H[x][c+1] > -1 ){
+  //           for (d=1; d <=op->distinguisher[x][a][b][c][0]; d++ ){
+  //             ind=  op->distinguisher[x][a][b][c][d];
+  //             if ( ind > -1 ){      
+  //               for (y=0; y < op->num_vert_G; y++){  
+  //                 if ( y != x){
+  //                   for (e =0; e < op->list_G2H[y][0]; e++){
+  //                     for (f =0; f < op->list_G2H[y][0]; f++){
+  //                       for (g =0; g < op->list_G2H[y][0]; g++){  
+  //                         i_e=op->list_G2H[y][e+1]; i_f=op->list_G2H[y][f+1]; i_g=op->list_G2H[y][g+1];
+  //                         if (op->list_G2H[y][e+1] > -1 && op->list_G2H[y][f+1] > -1 && op->list_G2H[y][g+1] > -1 ){
+  //                           if (op->pair_list_G2H[x][y][i_a][i_e] && op->pair_list_G2H[x][y][i_b][i_f] && op->pair_list_G2H[x][y][i_c][i_g]){
+  //                             flag1=0;  
+  //                             for ( l=1; l <= op->distinguisher[y][e][f][g][0]; l++){   
+  //                               i_l=op->distinguisher[y][e][f][g][l];
+  //                               if ( i_l > -1 && op->pair_list_G2H[x][y][ind][i_l])   
+  //                                 flag1=1; 
+  //                             }
+
+  //                             if (!flag1) 
+  //                               op->distinguisher[x][a][b][c][d]=-1;
+  //                           }
+  //                         }
+  //                       }
+  //                     }
+  //                   }
+  //                 }
+  //               }
+  //             }
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
+  // }               
 
 }
 
@@ -338,12 +387,14 @@ void make_choice_distinguisher(GRAPHS *op)
                 if (i_a== op->distinguisher[x][a][b][c][d]) {
                  op->distinguisher[x][a][b][c][0]=1; 
                  op->distinguisher[x][a][b][c][1]=i_a;
+                 arc_consistency_dis(op);
              
                 }
            
                 if (i_c== op->distinguisher[x][a][b][c][d]) {
                   op->distinguisher[x][a][b][c][0]=1; 
                   op->distinguisher[x][a][b][c][1]=i_c;
+                  arc_consistency_dis(op);
                 }
               }
             }
