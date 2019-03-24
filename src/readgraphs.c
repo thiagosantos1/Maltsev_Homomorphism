@@ -17,7 +17,7 @@ void init_graphs_lists(GRAPHS *op, USER_PARAMS * ip, int read_g)
   init_list(op,ip->list_homom); 
   init_pair_list(op);
 
-  // print_graphH(op);
+  // print_graphH(op); 
   // print_graphG(op);
   // print_list(op);
   // print_init_pairs(op);
@@ -40,7 +40,7 @@ void init_graph_g(GRAPHS *op, char * file_name)
   op->graph_g = malloc(op->num_vert_G * sizeof(int *));
   for(i=0; i<op->num_vert_G; i++){
     op->graph_g[i] = malloc(op->num_vert_G * sizeof(int));
-    memset(op->graph_g[i],0,op->num_vert_G);
+    memset(op->graph_g[i],0,op->num_vert_G * sizeof(int) );
   }
 
   // initialize degrees to zero
@@ -57,7 +57,8 @@ void init_graph_g(GRAPHS *op, char * file_name)
 
   // Set all nodes to active/availave. 
   op->activeG = malloc(op->num_vert_G * sizeof(int));
-  memset(op->activeG,1,op->num_vert_G);
+  for(i=0; i< op->num_vert_G; i++)
+    op->activeG[i] = 1;
 
 
 
@@ -79,7 +80,7 @@ void init_graph_h(GRAPHS *op, char * file_name)
   op->graph_h = malloc(op->num_vert_H * sizeof(int *));
   for(i=0; i<op->num_vert_H; i++){
     op->graph_h[i] = malloc(op->num_vert_H * sizeof(int));
-    memset(op->graph_h[i],0,op->num_vert_H);
+    memset(op->graph_h[i],0,op->num_vert_H * sizeof(int) );
   }
 
   // initialize degrees to zero
@@ -107,7 +108,7 @@ void init_list(GRAPHS *op, char * file_name)
   op->list_G2H = malloc(op->num_vert_G * sizeof(int *));
   for(i=0; i<op->num_vert_G; i++){
     op->list_G2H[i] = malloc(op->num_vert_H * sizeof(int));
-    memset(op->list_G2H[i],0,op->num_vert_H);
+    memset(op->list_G2H[i],0,op->num_vert_H * sizeof(int) );
   }
 
   for (x=0; x < op->num_vert_G; x++){ // assume everyone has a none-empty list 

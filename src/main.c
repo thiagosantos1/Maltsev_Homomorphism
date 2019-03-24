@@ -5,7 +5,7 @@
 * Main class to set all parameters to our LP
 * As well to set all user parameters to load all files needed 
 * to make our graph and its aditional informations
-* 
+*  
 * Copyright (C)
 * 
 ****************************************************************************/

@@ -81,7 +81,7 @@ void create_list_G2H(GRAPHS *op, USER_PARAMS * ip)
   op->list_G2H = malloc(op->num_vert_G * sizeof(int *));
   for(i=0; i<op->num_vert_G; i++){
     op->list_G2H[i] = malloc(op->num_vert_H * sizeof(int));
-    memset(op->list_G2H[i],0,op->num_vert_H);
+    memset(op->list_G2H[i],0,op->num_vert_H * sizeof(int) );
   }
 
 
@@ -162,7 +162,7 @@ void create_list_G2H(GRAPHS *op, USER_PARAMS * ip)
   // save graph H
 
   FILE * fp;
-   
+    
   fp=fopen(ip->graph_h,"w"); 
 
   if (fp ==NULL ) {
@@ -217,6 +217,19 @@ void save_list_G2H(GRAPHS *op, USER_PARAMS * ip)
   fclose (fp_list); 
 
 }
+
+
+/*
+
+list of X has 2 to the degre of x 
+
+The edges in H starts randmoly
+
+
+
+
+*/
+
 
 
 

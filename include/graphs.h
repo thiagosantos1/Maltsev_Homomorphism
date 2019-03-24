@@ -1,4 +1,4 @@
-/* Authors: Arash Rafiey Thiago Santos. --> https://github.com/thiagosantos1/  */
+/* Authors: Arash Rafiey & Thiago Santos. --> https://github.com/thiagosantos1/  */
 
 /***************************************************************************
 * This class is designed to have all the information needed for other 
