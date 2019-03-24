@@ -45,13 +45,26 @@ void construct_H(NEW_GRAPHS *op)
   // For this implementation, we are using the sum of (2 to the degree of each vertex)
   op->num_E_H  = 0;
   op->numVertH = 0;
+  int max_degree = 0; // Used to then create the size of matrix H(save space)
+  int degree, last_vert = 0;
   for(int i =0; i<op->numVertG; i++){
-    op->numVertH += (int) pow(2,op->degrees_g[i]);
-    printf("%d ",op->degrees_g[i] );
+    degree = (int) pow(2,op->degrees_g[i]);
+    max_degree = degree > max_degree ? degree:max_degree;
+    op->numVertH += degree;
   }
-  printf("\n");
 
-  printf("%d\n",op->numVertH);
+  // each vertex of G is "assign" in H 2 to the power of degree of that vertice
+  op->graph_h = malloc(op->numVertG * sizeof(int * ));
+  for(int i=0; i<op->numVertG; i++){
+    // +1 because one position is to how many vertices for that g
+    op->graph_h[i] = malloc( (max_degree +1 ) * sizeof(int) ); 
+    op->graph_h[i][0] = (int) pow(2,op->degrees_g[i]);
+    for(int x=1; x<=op->graph_h[i][0]; x++){
+      op->graph_h[i][x] = last_vert;
+      last_vert++;
+    }
+  }
+
 }
 
 int main(int argc, char const *argv[])
