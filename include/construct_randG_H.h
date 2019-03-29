@@ -43,6 +43,11 @@ void construct_G(NEW_GRAPHS *op);
 /* Graph H is random created, but with some conditions to contain a rectangle(MinMax)*/
 void construct_H(NEW_GRAPHS *op);
 
+/* construct a fixed G & H, for test porpouse */
+void contruct_fixedG_H(NEW_GRAPHS *op);
+
+void pairs_rectangles(NEW_GRAPHS *op);
+void path_rectangles(NEW_GRAPHS *op);
 
 
 
