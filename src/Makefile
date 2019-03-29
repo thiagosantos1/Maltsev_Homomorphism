@@ -32,7 +32,7 @@ clean:
 G_H:
 	@#@echo $$numV
 	@#@echo $$prob
-	@#make run numV=10
+	@#make G_H numVG=50 probG=0.5 probH=0.5
 	@../bin/./construct_G_H $$numVG $$probG $$probH
 
 run:

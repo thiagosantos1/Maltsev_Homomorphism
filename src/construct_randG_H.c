@@ -16,7 +16,7 @@ int main(int argc, char const *argv[])
   
   NEW_GRAPHS graphs;
 
-  graphs.numVertG = 4;
+  graphs.numVertG = 20;
   graphs.prob_edgeG = 0.5;
   graphs.prob_edgeH = 0.5;
 
