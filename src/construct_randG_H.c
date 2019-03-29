@@ -39,8 +39,22 @@ int main(int argc, char const *argv[])
   contruct_fixedG_H(&graphs);
 
   // complete H to mantain the rectangle property 
+  printf("\nBefore\n");
+  for(int i =0; i<graphs.numVertH; i++){
+    for(int j =0; j<graphs.numVertH; j++){
+      printf("%d ",graphs.graph_h[i][j] );
+    }
+    printf("\n");
+  }
   pairs_rectangles(&graphs);
   path_rectangles(&graphs);
+  printf("\nAfter\n");
+  for(int i =0; i<graphs.numVertH; i++){
+    for(int j =0; j<graphs.numVertH; j++){
+      printf("%d ",graphs.graph_h[i][j] );
+    }
+    printf("\n");
+  }
   
   return 0;
 }
@@ -206,27 +220,27 @@ void contruct_fixedG_H(NEW_GRAPHS *op)
     }  
   }
 
-  printf("G:%d\n", op->numVertG );
-  for(int i=0; i<op->numVertG; i++){
-    for(int j=0; j<op->numVertG; j++){
-      printf("%d ", op->graph_g[i][j]);
-    }
-    printf("\n");
-  }
+  // printf("G:%d\n", op->numVertG );
+  // for(int i=0; i<op->numVertG; i++){
+  //   for(int j=0; j<op->numVertG; j++){
+  //     printf("%d ", op->graph_g[i][j]);
+  //   }
+  //   printf("\n");
+  // }
 
-  printf("\nH:%d\n", op->numVertH);
-  for(int i=0; i<op->numVertH; i++){
-    for(int j=0; j<op->numVertH; j++){
-      printf("%d ", op->graph_h[i][j]);
-    }
-    printf("\n");
-  }
+  // printf("\nH:%d\n", op->numVertH);
+  // for(int i=0; i<op->numVertH; i++){
+  //   for(int j=0; j<op->numVertH; j++){
+  //     printf("%d ", op->graph_h[i][j]);
+  //   }
+  //   printf("\n");
+  // }
 
 }
 
 void pairs_rectangles(NEW_GRAPHS *op)
 {
-  int x,y,i,j,a,b;
+  int x,y,i,j,a,b, i_, j_, ab_;
   // for every xy in G
   for(x=0; x<op->numVertG; x++){
     for(y=1+x; y<op->numVertG; y++ ){
@@ -237,8 +251,36 @@ void pairs_rectangles(NEW_GRAPHS *op)
           for(j=i+1; j<=op->list_G2H[x][0]; j++){
             a = op->list_G2H[x][i];
             b = op->list_G2H[x][j];
-            
-            
+
+            // all in L(y)
+            for(i_=1; i_<=op->list_G2H[y][0]; i_++){
+              ab_ = op->list_G2H[y][i_];
+              // check for crossing/intersection
+              if(op->graph_h[ab_][a] &&  op->graph_h[ab_][b]){
+
+                // then, all nbrs of a must be nbr of b and vice-versa
+                for(j_=0; j_<op->numVertH; j_++){
+
+                  if(op->graph_h[a][j_] >0 && op->graph_h[b][j_] <1 ){
+                    op->graph_h[b][j_] = 1;
+                    op->graph_h[j_][b] = 1;
+                    op->degrees_h[b]++;
+                    op->degrees_h[j_]++;
+                    op->num_E_G +=2;
+                  }
+
+                  if(op->graph_h[b][j_] >0 && op->graph_h[a][j_] <1 ){
+                    op->graph_h[a][j_] = 1;
+                    op->graph_h[j_][a] = 1;
+                    op->degrees_h[a]++;
+                    op->degrees_h[j_]++;
+                    op->num_E_G +=2;
+                  }
+                }
+              }
+
+            }
+
           }
         }
       }
