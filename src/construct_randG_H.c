@@ -34,9 +34,9 @@ int main(int argc, char const *argv[])
   time_t t;
   srand((unsigned) time(&t));
 
-  //construct_G(&graphs);
-  //construct_H(&graphs);
-  contruct_fixedG_H(&graphs);
+  construct_G(&graphs);
+  construct_H(&graphs);
+  //contruct_fixedG_H(&graphs);
 
   // complete H to mantain the rectangle property 
   printf("\nBefore\n");
