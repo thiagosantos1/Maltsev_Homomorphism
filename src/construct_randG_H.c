@@ -16,7 +16,7 @@ int main(int argc, char const *argv[])
   
   NEW_GRAPHS graphs;
 
-  graphs.numVertG = 20;
+  graphs.numVertG = 6;
   graphs.prob_edgeG = 0.5;
   graphs.prob_edgeH = 0.5;
 
@@ -39,6 +39,7 @@ int main(int argc, char const *argv[])
   //contruct_fixedG_H(&graphs);
 
   // complete H to mantain the rectangle property 
+  //printf("%d\n",graphs.numVertH );
   printf("\nBefore\n");
   for(int i =0; i<graphs.numVertH; i++){
     for(int j =0; j<graphs.numVertH; j++){
@@ -97,7 +98,7 @@ void construct_H(NEW_GRAPHS *op)
   int max_degree = 0; // Used to then create the size of matrix H(save space)
   int degree, last_vert = 0, i, x, j;
   for(i =0; i<op->numVertG; i++){
-    degree = (int) pow(2,op->degrees_g[i] *2);
+    degree = (int) pow(2,op->degrees_g[i] );
     max_degree = degree > max_degree ? degree:max_degree;
     op->numVertH += degree;
   }
@@ -107,7 +108,7 @@ void construct_H(NEW_GRAPHS *op)
   for(i=0; i<op->numVertG; i++){
     // +1 because one position is to how many vertices for that g
     op->list_G2H[i] = malloc( (max_degree +1 ) * sizeof(int) ); 
-    op->list_G2H[i][0] = (int) pow(2,op->degrees_g[i] *2);
+    op->list_G2H[i][0] = (int) pow(2,op->degrees_g[i]);
     for(x=1; x<=op->list_G2H[i][0]; x++){
       op->list_G2H[i][x] = last_vert;
       last_vert++;
