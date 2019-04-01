@@ -13,9 +13,19 @@
 
 int main(int argc, char const *argv[])
 {
+
+  /* All commands should be typed inside of folder src
+    To compile: make
+    To run Maltsev: make run
+    To construct G & H with default values: make G_H
+    To construct G & H with arguments: make G_H numVG=8 probG=0.4 probH=0.5 
+  */
   
   NEW_GRAPHS graphs;
-
+  
+  
+  // default values
+  // can pass values by argument via argv, manually or by using Makefile
   graphs.numVertG = 6;
   graphs.prob_edgeG = 0.5;
   graphs.prob_edgeH = 0.5;
@@ -36,7 +46,7 @@ int main(int argc, char const *argv[])
 
   construct_G(&graphs);
   construct_H(&graphs);
-  //contruct_fixedG_H(&graphs);
+  //contruct_fixedG_H(&graphs); // uses graph G & H & list from etc - Good for testing porpouse
 
   // complete H to mantain the rectangle property 
   //printf("%d\n",graphs.numVertH );
@@ -222,22 +232,6 @@ void contruct_fixedG_H(NEW_GRAPHS *op)
       op->list_G2H[y][i+1]=b;
     }  
   }
-
-  // printf("G:%d\n", op->numVertG );
-  // for(int i=0; i<op->numVertG; i++){
-  //   for(int j=0; j<op->numVertG; j++){
-  //     printf("%d ", op->graph_g[i][j]);
-  //   }
-  //   printf("\n");
-  // }
-
-  // printf("\nH:%d\n", op->numVertH);
-  // for(int i=0; i<op->numVertH; i++){
-  //   for(int j=0; j<op->numVertH; j++){
-  //     printf("%d ", op->graph_h[i][j]);
-  //   }
-  //   printf("\n");
-  // }
 
 }
 
