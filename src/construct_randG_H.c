@@ -40,22 +40,24 @@ int main(int argc, char const *argv[])
 
   // complete H to mantain the rectangle property 
   //printf("%d\n",graphs.numVertH );
-  printf("\nBefore\n");
-  for(int i =0; i<graphs.numVertH; i++){
-    for(int j =0; j<graphs.numVertH; j++){
-      printf("%d ",graphs.graph_h[i][j] );
-    }
-    printf("\n");
-  }
+  // printf("\nBefore\n");
+  // for(int i =0; i<graphs.numVertH; i++){
+  //   for(int j =0; j<graphs.numVertH; j++){
+  //     printf("%d ",graphs.graph_h[i][j] );
+  //   }
+  //   printf("\n");
+  // }
   pairs_rectangles(&graphs);
   path_rectangles(&graphs);
-  printf("\nAfter\n");
-  for(int i =0; i<graphs.numVertH; i++){
-    for(int j =0; j<graphs.numVertH; j++){
-      printf("%d ",graphs.graph_h[i][j] );
-    }
-    printf("\n");
-  }
+  save_graphs(&graphs);
+  save_list(&graphs);
+  // printf("\nAfter\n");
+  // for(int i =0; i<graphs.numVertH; i++){
+  //   for(int j =0; j<graphs.numVertH; j++){
+  //     printf("%d ",graphs.graph_h[i][j] );
+  //   }
+  //   printf("\n");
+  // }
   
   return 0;
 }
@@ -267,7 +269,7 @@ void pairs_rectangles(NEW_GRAPHS *op)
                     op->graph_h[j_][b] = 1;
                     op->degrees_h[b]++;
                     op->degrees_h[j_]++;
-                    op->num_E_G +=2;
+                    op->num_E_H +=2;
                   }
 
                   if(op->graph_h[b][j_] >0 && op->graph_h[a][j_] <1 ){
@@ -275,7 +277,7 @@ void pairs_rectangles(NEW_GRAPHS *op)
                     op->graph_h[j_][a] = 1;
                     op->degrees_h[a]++;
                     op->degrees_h[j_]++;
-                    op->num_E_G +=2;
+                    op->num_E_H +=2;
                   }
                 }
               }
@@ -293,6 +295,72 @@ void pairs_rectangles(NEW_GRAPHS *op)
 }
 void path_rectangles(NEW_GRAPHS *op)
 {
+
+}
+
+void save_graphs(NEW_GRAPHS *op)
+{
+  FILE * fp;
+  
+  fp=fopen("../etc/graph_G_out.txt","w"); 
+
+  if (fp ==NULL ) {
+    printf("Error openning file\n");
+    return;
+  } 
+  
+  fprintf (fp,"%d ", op->numVertG);
+  fprintf (fp,"%d", op->num_E_G);
+
+  for(int i =0; i<op->numVertG; i++){
+    for(int j =1+i; j<op->numVertG; j++){
+      if(op->graph_g[i][j] >0){
+        fprintf(fp, "\n%d %d\n%d %d", i,j,j,i);
+      }
+    }
+  }
+
+  fp=fopen("../etc/graph_H_out.txt","w"); 
+
+  if (fp ==NULL ) {
+    printf("Error openning file\n");
+    return;
+  } 
+  
+  fprintf (fp,"%d ", op->numVertH);
+  fprintf (fp,"%d", op->num_E_H);
+
+  for(int i =0; i<op->numVertH; i++){
+    for(int j =1+i; j<op->numVertH; j++){
+      if(op->graph_h[i][j] >0){
+        fprintf(fp, "\n%d %d\n%d %d", i,j,j,i);
+      }
+    }
+  }
+
+  fclose(fp);
+
+}
+void save_list(NEW_GRAPHS *op)
+{
+  FILE * fp;
+  
+  fp=fopen("../etc/list_file_out.txt","w"); 
+
+  if (fp ==NULL ) {
+    printf("Error openning file\n");
+    return;
+  } 
+
+  for(int i=0; i<op->numVertG; i++){
+    // +1 because one position is to how many vertices for that g
+    fprintf (fp,"%d %d", i, op->list_G2H[i][0]);
+    for(int x=1; x<=op->list_G2H[i][0]; x++){
+      fprintf (fp," %d", op->list_G2H[i][x]);
+    }
+    if(i<op->numVertG-1)
+      fprintf(fp,"\n");
+  }
 
 }
 
