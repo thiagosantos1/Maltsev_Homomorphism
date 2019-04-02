@@ -36,7 +36,7 @@ G_H:
 	@../bin/./construct_G_H $$numVG $$probG $$probH
 
 run:
-	../bin/./maltsev_run ../etc/graph_G.txt ../etc/graph_H.txt ../etc/list_file.txt 
+	../bin/./maltsev_run $$G $$H $$L
 
 
 

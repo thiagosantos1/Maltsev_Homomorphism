@@ -28,6 +28,11 @@ int main(int argc, char const *argv[])
   userpar.graph_h = "../etc/graph_H.txt";
   userpar.list_homom = "../etc/list_file.txt";
 
+  if(argc ==4){
+    userpar.graph_g = argv[1];
+    userpar.graph_h = argv[2];
+    userpar.list_homom = argv[3];
+  }
 
   // you can set manually create_new_H = 1
   if(create_new_H >0){
