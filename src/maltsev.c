@@ -372,14 +372,15 @@ void run_distinguisher(GRAPHS *op)
 void make_choice_distinguisher(GRAPHS *op)
 {
   int x,a,b,c,d;
-  int i_a,i_b,i_c;
+  int i_a,i_c;
+  // int i_b;
 
   for (x=0; x < op->num_vert_G; x++){ 
     for (a=0; a < op->list_G2H[x][0]; a++){
       for (b=0; b < op->list_G2H[x][0]; b++){
         for (c=0; c < op->list_G2H[x][0]; c++){
           i_a=op->list_G2H[x][a+1];  
-          i_b=op->list_G2H[x][b+1]; 
+          //i_b=op->list_G2H[x][b+1]; 
           i_c=op->list_G2H[x][c+1];
           if (op->list_G2H[x][a+1] > -1 && op->list_G2H[x][b+1] > -1 && op->list_G2H[x][c+1] > -1 ){
             for (d=1; d<= op->distinguisher[x][a][b][c][0]; d++){

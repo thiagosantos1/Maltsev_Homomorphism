@@ -47,9 +47,9 @@ typedef struct graphdata {
 
 
 typedef struct userdata {
-  char *graph_g;  // Graph G file name
-  char *graph_h;  // Graph H file name
-  char *list_homom;     // List os possible assignments from G to H
+  const char *graph_g;  // Graph G file name
+  const char *graph_h;  // Graph H file name
+  const char *list_homom;     // List os possible assignments from G to H
 
 } USER_PARAMS;
 

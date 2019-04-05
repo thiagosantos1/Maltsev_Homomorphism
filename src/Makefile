@@ -1,4 +1,4 @@
-CC     = gcc #-lm
+CC     = gcc -lm
 HDR1   = ../include/graphs.h
 OPT    = -g -Wall
 CFLAGS = -c -I../include
@@ -9,8 +9,8 @@ all: maltsev_run construct_G_H
 maltsev_run: main.o readgraphs.o graphsconstruct.o pre_processing.o maltsev.o
 	$(CC) $(OPT) -o ../bin/$@ main.o readgraphs.o graphsconstruct.o pre_processing.o  maltsev.o
 
-construct_G_H: construct_randG_H.o
-	$(CC) $(OPT) -o ../bin/$@  construct_randG_H.o 
+construct_G_H: construct_randG_H.o bfs_list_consistency.o
+	$(CC) $(OPT) -o ../bin/$@  construct_randG_H.o bfs_list_consistency.o
 
 
 main.o: main.c $(HDR1)
@@ -25,6 +25,8 @@ maltsev.o: maltsev.c $(HDR1)
 	$(CC) $(CFLAGS) $(OPT) maltsev.c
 construct_randG_H.o: construct_randG_H.c $(HDR1)
 	$(CC) $(CFLAGS) $(OPT) construct_randG_H.c 
+bfs_list_consistency.o: bfs_list_consistency.c $(HDR1)
+	$(CC) $(CFLAGS) $(OPT) bfs_list_consistency.c 
 
 clean:
 	rm -f *.o ../bin/*

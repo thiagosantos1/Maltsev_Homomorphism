@@ -2,27 +2,20 @@
    Copyright (C)
 */
 
-#include <stdio.h>  
+#include <stdio.h>   
 #include <stdlib.h>
 #include <string.h>  
 #include <unistd.h>
 #include <math.h>
 #include <time.h>
 #include <construct_randG_H.h>
-
+#include <bfs_list_consistency.h>
+   
 
 int main(int argc, char const *argv[])
 {
 
-  /* All commands should be typed inside of folder src
-    To compile: make
-    To run Maltsev: make run
-    To construct G & H with default values: make G_H
-    To construct G & H with arguments: make G_H numVG=8 probG=0.4 probH=0.5 
-  */
-  
   NEW_GRAPHS graphs;
-  
   
   // default values
   // can pass values by argument via argv, manually or by using Makefile
@@ -48,26 +41,15 @@ int main(int argc, char const *argv[])
   construct_H(&graphs);
   //contruct_fixedG_H(&graphs); // uses graph G & H & list from etc - Good for testing porpouse
 
-  // complete H to mantain the rectangle property 
-  //printf("%d\n",graphs.numVertH );
-  // printf("\nBefore\n");
-  // for(int i =0; i<graphs.numVertH; i++){
-  //   for(int j =0; j<graphs.numVertH; j++){
-  //     printf("%d ",graphs.graph_h[i][j] );
-  //   }
-  //   printf("\n");
-  // }
   pairs_rectangles(&graphs);
   path_rectangles(&graphs);
   save_graphs(&graphs);
   save_list(&graphs);
-  // printf("\nAfter\n");
-  // for(int i =0; i<graphs.numVertH; i++){
-  //   for(int j =0; j<graphs.numVertH; j++){
-  //     printf("%d ",graphs.graph_h[i][j] );
-  //   }
-  //   printf("\n");
-  // }
+
+  BFS_DATA bfs_data;
+
+  // run bfs for list consistency
+  bfs_list_consis(&bfs_data,&graphs);
   
   return 0;
 }
@@ -357,8 +339,3 @@ void save_list(NEW_GRAPHS *op)
   }
 
 }
-
-
-
-
-

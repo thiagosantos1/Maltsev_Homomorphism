@@ -24,7 +24,7 @@ void init_graphs_lists(GRAPHS *op, USER_PARAMS * ip, int read_g)
 
 }
 
-void init_graph_g(GRAPHS *op, char * file_name)
+void init_graph_g(GRAPHS *op, const char * file_name)
 {
   FILE * fp = fopen(file_name, "r");
   if(fp == NULL){
@@ -64,7 +64,7 @@ void init_graph_g(GRAPHS *op, char * file_name)
 
 }
 
-void init_graph_h(GRAPHS *op, char * file_name)
+void init_graph_h(GRAPHS *op, const char * file_name)
 {
   FILE * fp = fopen(file_name, "r");
   if(fp == NULL){
@@ -96,7 +96,7 @@ void init_graph_h(GRAPHS *op, char * file_name)
 
 }
 
-void init_list(GRAPHS *op, char * file_name)
+void init_list(GRAPHS *op, const char * file_name)
 {
   FILE * fp = fopen(file_name, "r");
   if(fp == NULL){

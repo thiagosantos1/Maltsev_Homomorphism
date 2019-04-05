@@ -15,13 +15,13 @@
 
 /* Based on the file given from user, this method initialize the list homomophism 
    which is all possible assigments in H, for each vertex in G*/
-void init_list(GRAPHS *op, char * file_name);
+void init_list(GRAPHS *op, const char * file_name);
 
 /* Initialize graph */
-void init_graph_g(GRAPHS *op, char * file_name);
+void init_graph_g(GRAPHS *op, const char * file_name);
 
 /* Initialize graph */
-void init_graph_h(GRAPHS *op, char * file_name);
+void init_graph_h(GRAPHS *op, const char * file_name);
 
 /* based on the list homomophism, we create a pair list for all vertices */
 void init_pair_list(GRAPHS *op);

@@ -10,6 +10,7 @@ int pre_process(GRAPHS *op)
 {
   arc_consistency(op);
   int out = pair_consistency(op);
+  
   return out;
 }
 

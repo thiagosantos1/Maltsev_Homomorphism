@@ -37,6 +37,7 @@ typedef struct graphdata {
 
 } NEW_GRAPHS;
 
+
 /* Graph G is random created*/
 void construct_G(NEW_GRAPHS *op);
 
@@ -51,8 +52,3 @@ void path_rectangles(NEW_GRAPHS *op);
 
 void save_graphs(NEW_GRAPHS *op);
 void save_list(NEW_GRAPHS *op);
-
-
-
-
-
