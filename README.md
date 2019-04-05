@@ -25,11 +25,18 @@ After appling the theory, the graph and its list left can be used to find a solu
     * This is the main class. Once you have all graphs, list & pairs loaded, we can use this class and its methods to run our maltsev algorithm.
     * Here is where we do the pre-processing of the graph, reducing the list of each Vertex by doing pair consistency.
 
-  * construct_randG_H
+  * construct_randG_h
     * This class is designed to construct a random graph G & H.
     * Size of H depends on G, since the number of vertices in H that a vertex x in G can be assigned depends on the degree of x
     * G & H are random. However, H has to have/preserve some properties, such as the rectangle property. 
       * This implies that the list homomosphism of G has the rectangle property. Thus, we may find the solution in polynomial time.
+
+  * bfs_listConsistency.h
+    * After creating a random graph G & H, we may end up with a list homomorphism with dead vertices. Thus, we must run some kind of list consistency
+    * Thus, the aim of this class is to make sure we end up with a consistent list. In other words, we may insert new edges to obtain such consistency.
+    * The idea of using bfs is to make sure that from a vertice a from H we can reach another vertice b in H, where a is in the list </br>
+      of x and b is the list of z and there is a path from x to z in G.
+      * If there is a path from x to z in G, but you can reach an element of list of z by using one of the element in list o x, then we have to create such path.
 
 # How to use the code
   There's a Makefile in the folder src, which helps the process.
