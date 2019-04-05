@@ -31,7 +31,7 @@ After appling the theory, the graph and its list left can be used to find a solu
     * G & H are random. However, H has to have/preserve some properties, such as the rectangle property. 
       * This implies that the list homomosphism of G has the rectangle property. Thus, we may find the solution in polynomial time.
 
-  * bfs_listConsistency.h
+  * bfs_list_consistency.h
     * After creating a random graph G & H, we may end up with a list homomorphism with dead vertices. Thus, we must run some kind of list consistency
     * Thus, the aim of this class is to make sure we end up with a consistent list. In other words, we may insert new edges to obtain such consistency.
     * The idea of using bfs is to make sure that from a vertice a from H we can reach another vertice b in H, where a is in the list </br>
