@@ -34,4 +34,8 @@ void make_choice_distinguisher(GRAPHS *op);
 
 void run_distinguisher(GRAPHS *op);
 
-int check_maltsev(GRAPHS *op);
+int is_empty_list(GRAPHS *op);
+
+// return if there any empty list
+int empty_list(GRAPHS *op);
+

@@ -120,8 +120,17 @@ void construct_H(NEW_GRAPHS *op)
   // Randomly create H and its edges
   for(i=0; i< op->numVertG - 1; i++){ // for each vertice of G
     for(j=1; j<=op->list_G2H[i][0]; j++){ // All possible assigns in H for vertice i in G
+      // make sure j goes to at least of vertice of H
+      int sure_edge = (rand() % op->list_G2H[i+1][0]) + 1;
+      op->graph_h[op->list_G2H[i][j]][op->list_G2H[i+1][sure_edge]] = 1;
+      op->graph_h[op->list_G2H[i+1][sure_edge]][op->list_G2H[i][j]] = 1;
+      op->num_E_H +=2;
+      op->degrees_h[op->list_G2H[i][j]]++;
+      op->degrees_h[op->list_G2H[i+1][sure_edge]]++;
+      //printf("{%d, %d}:  %d %d\n", i,op->degrees_g[i], op->list_G2H[i][j],op->list_G2H[i+1][sure_edge] );
+      // Randomly add edges
       for(x=1; x<=op->list_G2H[i+1][0]; x++){ // All possible assign in H for vertice i+1
-        if( ((float)rand() / (float)RAND_MAX) >= op->prob_edgeH ){
+        if( (((float)rand() / (float)RAND_MAX) >= op->prob_edgeH) && sure_edge != x){
           op->graph_h[op->list_G2H[i][j]][op->list_G2H[i+1][x]] = 1;
           op->graph_h[op->list_G2H[i+1][x]][op->list_G2H[i][j]] = 1;
           op->num_E_H +=2;
@@ -339,3 +348,20 @@ void save_list(NEW_GRAPHS *op)
   }
 
 }
+
+void print_degrees(NEW_GRAPHS *op, int graph)
+{
+  if(graph ==1){
+    printf("\n");
+    for(int i =0; i<op->numVertG; i++)
+      printf("%d ",  op->degrees_g[i]);
+    printf("\n");
+  }else{
+    printf("\n");
+    for(int i =0; i<op->numVertH; i++)
+      printf("%d ",  op->degrees_h[i]);
+    printf("\n");
+  }
+
+}
+

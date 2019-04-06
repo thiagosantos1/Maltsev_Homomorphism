@@ -52,3 +52,6 @@ void path_rectangles(NEW_GRAPHS *op);
 
 void save_graphs(NEW_GRAPHS *op);
 void save_list(NEW_GRAPHS *op);
+void print_degrees(NEW_GRAPHS *op, int graph); // 1 for G and 2 for H
+
+

@@ -18,4 +18,3 @@
 int pre_process(GRAPHS *op);
 void arc_consistency(GRAPHS *op);
 int pair_consistency(GRAPHS *op);
-

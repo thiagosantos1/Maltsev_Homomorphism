@@ -12,7 +12,11 @@ int run_maltsev(GRAPHS *op)
 {
   
   int out=pre_process(op);
-  //print_pairs(op);
+  if(out <1){
+    print_pairs(op);
+    printf("\nSome pairs are empty. No Maltsev\n\n");
+    exit(0);
+  }
 
   init_distinguisher(op);
   //print_distinguisher(op);
@@ -113,6 +117,28 @@ void print_pairs(GRAPHS *op)
       printf("\n");
     }
   }  
+}
+
+int is_empty_list(GRAPHS *op){
+
+  int x,y,a,b,out;
+
+  for (x=0; x< op->num_vert_G ; x++){ 
+    for (y=0; y< op->num_vert_G ; y++){ 
+      out = 1;
+      for (a=0; a< op->num_vert_H; a++){ 
+        for (b=0; b< op->num_vert_H; b++){ 
+          if ( op->pair_list_G2H[x][y][a][b] >0){
+            out = 0;
+          }
+        }
+      }
+      if(out >0)
+        return 1;
+    }
+  } 
+
+  return 0;
 }
 
 

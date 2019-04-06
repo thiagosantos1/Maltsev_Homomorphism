@@ -19,6 +19,5 @@ void bfs_list_consis(BFS_DATA *bf, NEW_GRAPHS *op)
 
 void construct_bfs_graph(BFS_DATA *bf, NEW_GRAPHS *op)
 {
-  printf("%d %d\n", op->numVertG, op->numVertH);
-  printf("%d %d\n", bf->front, bf->rear);
+
 }

@@ -1,4 +1,4 @@
-/* Authors: Arash Rafiey Thiago Santos. --> https://github.com/thiagosantos1/
+ /* Authors: Arash Rafiey Thiago Santos. --> https://github.com/thiagosantos1/
    Copyright (C)
 */
 
@@ -9,8 +9,14 @@
 int pre_process(GRAPHS *op)
 {
   arc_consistency(op);
+  print_pairs(op);
+  printf("\n\n\n\n");
+  if(is_empty_list(op) >0){
+    print_pairs(op);
+    printf("\nThere are some empty list. No Maltsev\n\n");
+    exit(0);
+  }
   int out = pair_consistency(op);
-  
   return out;
 }
 

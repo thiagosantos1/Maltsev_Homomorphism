@@ -22,7 +22,6 @@ int main(int argc, char const *argv[])
 
   int create_new_H = 0;
 
-
   // Default configuration
   userpar.graph_g = "../etc/graph_G.txt";
   userpar.graph_h = "../etc/graph_H.txt";
@@ -33,7 +32,7 @@ int main(int argc, char const *argv[])
     userpar.graph_h = argv[2];
     userpar.list_homom = argv[3];
   }
-
+  
   // you can set manually create_new_H = 1
   if(create_new_H >0){
     create_list_G2H(&graphs, &userpar );
