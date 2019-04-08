@@ -41,15 +41,16 @@ int main(int argc, char const *argv[])
   construct_H(&graphs);
   //contruct_fixedG_H(&graphs); // uses graph G & H & list from etc - Good for testing porpouse
 
-  pairs_rectangles(&graphs);
-  path_rectangles(&graphs);
-  save_graphs(&graphs);
-  save_list(&graphs);
-
   BFS_DATA bfs_data;
 
   // run bfs for list consistency
   bfs_list_consis(&bfs_data,&graphs);
+
+   
+  pairs_rectangles(&graphs);
+  path_rectangles(&graphs);
+  save_graphs(&graphs);
+  save_list(&graphs);
   
   return 0;
 }
