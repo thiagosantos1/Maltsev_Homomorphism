@@ -2,7 +2,7 @@
    Copyright (C)
 */
 
-
+ 
 #include <graphs.h>  
 #include <maltsev.h> 
 #include <pre_processing.h> 
@@ -10,7 +10,6 @@
 
 int run_maltsev(GRAPHS *op)
 {
-  
   int out=pre_process(op);
   if(out <1){
     print_pairs(op);

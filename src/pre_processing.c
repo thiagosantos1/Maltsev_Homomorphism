@@ -9,9 +9,8 @@
 int pre_process(GRAPHS *op)
 {
   arc_consistency(op);
-  print_pairs(op);
-  printf("\n\n\n\n");
   if(is_empty_list(op) >0){
+    printf("\n\n\n\n");
     print_pairs(op);
     printf("\nThere are some empty list. No Maltsev\n\n");
     exit(0);

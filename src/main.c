@@ -44,16 +44,21 @@ int main(int argc, char const *argv[])
 
   int out_maltsev = run_maltsev(&graphs);
 
-  if (out_maltsev==0) 
-    printf("there is no Maltsev \n");
+  if (out_maltsev==0){ 
+    printf("\n");
+    print_pairs(&graphs);
+    printf("\nThere is no Maltsev \n");
+  }
   else if (out_maltsev > 1 ){  
-    printf("there is no unique Maltsev solution \n");
+    printf("\n");
     print_distinguisher(&graphs);
-  }else if ( out_maltsev==1) 
-    printf("there is a  Maltsev \n");
+    printf("\nThere is no unique Maltsev solution \n");
+  }else if ( out_maltsev==1){ 
+    printf("\n");
+    print_pairs(&graphs);
+    printf("\nThere is a  Maltsev \n");
+  }
 
   return 0;
 
-}
-
-
+} 

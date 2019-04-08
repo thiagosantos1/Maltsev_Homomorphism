@@ -19,7 +19,7 @@ int main(int argc, char const *argv[])
   
   // default values
   // can pass values by argument via argv, manually or by using Makefile
-  graphs.numVertG = 6;
+  graphs.numVertG = 5;
   graphs.prob_edgeG = 0.5;
   graphs.prob_edgeH = 0.5;
 
@@ -90,7 +90,7 @@ void construct_H(NEW_GRAPHS *op)
   op->num_E_H  = 0;
   op->numVertH = 0;
   int max_degree = 0; // Used to then create the size of matrix H(save space)
-  int degree, last_vert = 0, i, x, j;
+  int degree, last_vert = 0, i, i_, x, j;
   for(i =0; i<op->numVertG; i++){
     degree = (int) pow(2,op->degrees_g[i] );
     max_degree = degree > max_degree ? degree:max_degree;
@@ -117,31 +117,38 @@ void construct_H(NEW_GRAPHS *op)
   op->num_E_H =0;
   op->degrees_h = malloc(op->numVertH * sizeof(int));
   memset(op->degrees_h,0,op->numVertH * sizeof(int));
-  // Randomly create H and its edges
-  for(i=0; i< op->numVertG - 1; i++){ // for each vertice of G
-    for(j=1; j<=op->list_G2H[i][0]; j++){ // All possible assigns in H for vertice i in G
-      // make sure j goes to at least of vertice of H
-      int sure_edge = (rand() % op->list_G2H[i+1][0]) + 1;
-      op->graph_h[op->list_G2H[i][j]][op->list_G2H[i+1][sure_edge]] = 1;
-      op->graph_h[op->list_G2H[i+1][sure_edge]][op->list_G2H[i][j]] = 1;
-      op->num_E_H +=2;
-      op->degrees_h[op->list_G2H[i][j]]++;
-      op->degrees_h[op->list_G2H[i+1][sure_edge]]++;
-      //printf("{%d, %d}:  %d %d\n", i,op->degrees_g[i], op->list_G2H[i][j],op->list_G2H[i+1][sure_edge] );
-      // Randomly add edges
-      for(x=1; x<=op->list_G2H[i+1][0]; x++){ // All possible assign in H for vertice i+1
-        if( (((float)rand() / (float)RAND_MAX) >= op->prob_edgeH) && sure_edge != x){
-          op->graph_h[op->list_G2H[i][j]][op->list_G2H[i+1][x]] = 1;
-          op->graph_h[op->list_G2H[i+1][x]][op->list_G2H[i][j]] = 1;
-          op->num_E_H +=2;
-          op->degrees_h[op->list_G2H[i][j]]++;
-          op->degrees_h[op->list_G2H[i+1][x]]++;
 
+  for(i=0; i< op->numVertG; i++){ // for each vertice of G
+    for(i_=0; i_< op->numVertG; i_++){ // for each vertice of G
+
+      if(i != i_){
+        for(j=1; j<=op->list_G2H[i][0]; j++){ // All possible assigns in H for vertice i in G
+          // make sure j goes to at least of vertice in the list of i_
+          int sure_edge = (rand() % op->list_G2H[i_][0]) + 1;
+          if(op->graph_h[op->list_G2H[i][j]][op->list_G2H[i_][sure_edge]] != 1){
+            op->graph_h[op->list_G2H[i][j]][op->list_G2H[i_][sure_edge]] = 1;
+            op->graph_h[op->list_G2H[i_][sure_edge]][op->list_G2H[i][j]] = 1;
+            op->num_E_H +=2;
+            op->degrees_h[op->list_G2H[i][j]]++;
+            op->degrees_h[op->list_G2H[i_][sure_edge]]++;
+          }
+          for(x=1; x<=op->list_G2H[i_][0]; x++){ // All possible assign in H for vertice i_
+
+            if( (((float)rand() / (float)RAND_MAX) >= op->prob_edgeH) && sure_edge != x){
+              if(op->graph_h[op->list_G2H[i][j]][op->list_G2H[i_][x]] != 1){
+                op->graph_h[op->list_G2H[i][j]][op->list_G2H[i_][x]] = 1;
+                op->graph_h[op->list_G2H[i_][x]][op->list_G2H[i][j]] = 1;
+                op->num_E_H +=2;
+                op->degrees_h[op->list_G2H[i][j]]++;
+                op->degrees_h[op->list_G2H[i_][x]]++;
+              }
+            }
+          }
         }
       }
     }
   }
-  
+
 }
 
 void contruct_fixedG_H(NEW_GRAPHS *op)
