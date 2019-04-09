@@ -37,7 +37,6 @@ typedef struct graphdata {
 
 } NEW_GRAPHS;
 
-
 /* Graph G is random created*/
 void construct_G(NEW_GRAPHS *op);
 
@@ -54,4 +53,10 @@ void save_graphs(NEW_GRAPHS *op);
 void save_list(NEW_GRAPHS *op);
 void print_degrees(NEW_GRAPHS *op, int graph); // 1 for G and 2 for H
 
+// make sure G is a connected graph
+void bfs_Gconnected(NEW_GRAPHS *op);
 
+void bfs(int queue[], int visited[], int front, int rear, NEW_GRAPHS *op, int vert);
+
+// make a random assignment to vertice i
+void make_rand_connection(NEW_GRAPHS *op, int x);

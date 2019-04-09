@@ -43,3 +43,4 @@ int * encode(int x, int y, int a, int b);
 
 // return the decode {x,y}, {a,b} for the encode {x_, y_} 
 int * decode(int x_, int y_);
+

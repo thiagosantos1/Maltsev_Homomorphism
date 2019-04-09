@@ -17,7 +17,7 @@ void bfs_list_consis(BFS_DATA *bf, NEW_GRAPHS *op)
   bf->numEdges = 0;
 
   construct_bfs_graph(bf, op);
-  print_graph(bf, op);
+  //print_graph(bf, op);
 
 }
 

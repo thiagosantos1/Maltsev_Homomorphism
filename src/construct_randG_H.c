@@ -40,13 +40,14 @@ int main(int argc, char const *argv[])
   construct_G(&graphs);
   construct_H(&graphs);
   //contruct_fixedG_H(&graphs); // uses graph G & H & list from etc - Good for testing porpouse
+  bfs_Gconnected(&graphs);
 
   BFS_DATA bfs_data;
 
   // run bfs for list consistency
   bfs_list_consis(&bfs_data,&graphs);
 
-   
+
   pairs_rectangles(&graphs);
   path_rectangles(&graphs);
   save_graphs(&graphs);
@@ -152,87 +153,66 @@ void construct_H(NEW_GRAPHS *op)
 
 }
 
-void contruct_fixedG_H(NEW_GRAPHS *op)
+void bfs_Gconnected(NEW_GRAPHS *op)
 {
-  FILE * fp = fopen("../etc/graph_G.txt", "r");
-  if(fp == NULL){
-    fprintf(stderr, "\nError opening file %s\n","graph_G" );
-    exit(0);
+  int queue[op->numVertG*30];   // for bfs exploration
+  int visited[op->numVertG*30]; // also used to control de exploration
+  int front=0;   // to remove the next one in the front of queue
+  int rear=-1;    // to insert at end of queue
+
+  memset(queue,0,op->numVertG * sizeof(int) );
+  memset(visited,0,op->numVertG * sizeof(int) );
+  bfs(queue, visited, front, rear, op, 0);
+  int done = 0;
+
+  while(!done){
+    done = 1;
+    for(int i=0; i<op->numVertG; i++){
+      if(!visited[i]){
+        done=0;
+        make_rand_connection(op,i);
+        front = 0;
+        rear = -1;
+        memset(queue,0,op->numVertG * sizeof(int) );
+        memset(visited,0,op->numVertG * sizeof(int) );
+        bfs(queue, visited, front, rear, op, 0);
+      }
+    }
   }
-  int i,j,x,y,b,counter;
-  char str1[10000],str2[10000];
-  fscanf(fp, "%s %s", str1,str2);
-  op->numVertG = atoi(str1);
-  op->num_E_G = atoi(str2);
-
-  op->graph_g = malloc(op->numVertG * sizeof(int *));
-  for(i=0; i<op->numVertG; i++){
-    op->graph_g[i] = malloc(op->numVertG * sizeof(int));
-    memset(op->graph_g[i],0,op->numVertG * sizeof(int) );
-  }
-  // initialize degrees to zero
-  op->degrees_g = (int *)calloc(op->numVertG, sizeof(int)); 
-
-  for (int x=0; x< op->num_E_G; x++) {
-    fscanf(fp, "%s %s", str1,str2);
-    i = atoi(str1);
-    j = atoi(str2);
-    op->graph_g[i][j] = 1;
-    op->degrees_g[i]++;
-  }
-
-  //graph h
-  fp = fopen("../etc/graph_H.txt", "r");
-  if(fp == NULL){
-    fprintf(stderr, "\nError opening file %s\n","graph_H" );
-    exit(0);
-  }
-  fscanf(fp, "%s %s", str1,str2);
-  op->numVertH = atoi(str1);
-  op->num_E_H = atoi(str2);
-
-  op->graph_h = malloc(op->numVertH * sizeof(int *));
-  for(i=0; i<op->numVertH; i++){
-    op->graph_h[i] = malloc(op->numVertH * sizeof(int));
-    memset(op->graph_h[i],0,op->numVertH * sizeof(int) );
-  }
-
-  // initialize degrees to zero
-  op->degrees_h = (int*) calloc(op->numVertH, sizeof(int));
-
-  for (x=0; x< op->num_E_H; x++) {
-    fscanf(fp, "%s %s", str1,str2);
-    i = atoi(str1);
-    j = atoi(str2);
-    op->graph_h[i][j] = 1;
-    op->degrees_h[i]++;
-  }
-
-  // list
-  fp = fopen("../etc/list_file.txt", "r");
-  if(fp == NULL){
-    fprintf(stderr, "\nError opening file %s\n","list_file" );
-    exit(0);
-  }
-
-  op->list_G2H = malloc(op->numVertG * sizeof(int *));
-  for(i=0; i<op->numVertG; i++){
-    op->list_G2H[i] = malloc(op->numVertH * sizeof(int));
-    memset(op->list_G2H[i],0,op->numVertH * sizeof(int) );
-  }
-
-  for (x=0; x < op->numVertG; x++){ // assume everyone has a none-empty list 
-    
-    fscanf(fp,"%d",&y); // the first one from G; 
-    fscanf (fp,"%d",&counter); // how many in the list of y 
-    op->list_G2H[y][0]=counter; 
-    for (i=0; i < counter; i++){   
-      fscanf (fp,"%d",&b);   // b is the element to be in L1(y) 
-      op->list_G2H[y][i+1]=b;
-    }  
-  }
-
 }
+
+void bfs(int queue[], int visited[], int front, int rear, NEW_GRAPHS *op, int vert)
+{
+  for(int i=0; i<op->numVertG; i++){
+    if(op->graph_g[vert][i] >0 && !visited[i])
+      queue[++rear] = i;
+  }
+
+  if(front <= rear){
+    visited[queue[front]] = 1;
+    vert = queue[front];
+    front++;
+    bfs(queue,visited,front,rear,op,vert);
+  }
+}
+
+void make_rand_connection(NEW_GRAPHS *op, int x)
+{
+  int done = 0;
+  while(!done){
+    done =1;
+    int y = (rand() % op->numVertG);
+    if(y!= x && op->graph_g[x][y] <1){
+      op->graph_g[x][y] = 1;
+      op->graph_g[y][x] = 1;
+      op->degrees_g[x]++;
+      op->degrees_g[y]++;
+      op->num_E_G +=2;
+      done = 1;
+    }
+  }
+}
+
 
 void pairs_rectangles(NEW_GRAPHS *op)
 {
@@ -373,3 +353,84 @@ void print_degrees(NEW_GRAPHS *op, int graph)
 
 }
 
+void contruct_fixedG_H(NEW_GRAPHS *op)
+{
+  FILE * fp = fopen("../etc/graph_G.txt", "r");
+  if(fp == NULL){
+    fprintf(stderr, "\nError opening file %s\n","graph_G" );
+    exit(0);
+  }
+  int i,j,x,y,b,counter;
+  char str1[10000],str2[10000];
+  fscanf(fp, "%s %s", str1,str2);
+  op->numVertG = atoi(str1);
+  op->num_E_G = atoi(str2);
+
+  op->graph_g = malloc(op->numVertG * sizeof(int *));
+  for(i=0; i<op->numVertG; i++){
+    op->graph_g[i] = malloc(op->numVertG * sizeof(int));
+    memset(op->graph_g[i],0,op->numVertG * sizeof(int) );
+  }
+  // initialize degrees to zero
+  op->degrees_g = (int *)calloc(op->numVertG, sizeof(int)); 
+
+  for (int x=0; x< op->num_E_G; x++) {
+    fscanf(fp, "%s %s", str1,str2);
+    i = atoi(str1);
+    j = atoi(str2);
+    op->graph_g[i][j] = 1;
+    op->degrees_g[i]++;
+  }
+
+  //graph h
+  fp = fopen("../etc/graph_H.txt", "r");
+  if(fp == NULL){
+    fprintf(stderr, "\nError opening file %s\n","graph_H" );
+    exit(0);
+  }
+  fscanf(fp, "%s %s", str1,str2);
+  op->numVertH = atoi(str1);
+  op->num_E_H = atoi(str2);
+
+  op->graph_h = malloc(op->numVertH * sizeof(int *));
+  for(i=0; i<op->numVertH; i++){
+    op->graph_h[i] = malloc(op->numVertH * sizeof(int));
+    memset(op->graph_h[i],0,op->numVertH * sizeof(int) );
+  }
+
+  // initialize degrees to zero
+  op->degrees_h = (int*) calloc(op->numVertH, sizeof(int));
+
+  for (x=0; x< op->num_E_H; x++) {
+    fscanf(fp, "%s %s", str1,str2);
+    i = atoi(str1);
+    j = atoi(str2);
+    op->graph_h[i][j] = 1;
+    op->degrees_h[i]++;
+  }
+
+  // list
+  fp = fopen("../etc/list_file.txt", "r");
+  if(fp == NULL){
+    fprintf(stderr, "\nError opening file %s\n","list_file" );
+    exit(0);
+  }
+
+  op->list_G2H = malloc(op->numVertG * sizeof(int *));
+  for(i=0; i<op->numVertG; i++){
+    op->list_G2H[i] = malloc(op->numVertH * sizeof(int));
+    memset(op->list_G2H[i],0,op->numVertH * sizeof(int) );
+  }
+
+  for (x=0; x < op->numVertG; x++){ // assume everyone has a none-empty list 
+    
+    fscanf(fp,"%d",&y); // the first one from G; 
+    fscanf (fp,"%d",&counter); // how many in the list of y 
+    op->list_G2H[y][0]=counter; 
+    for (i=0; i < counter; i++){   
+      fscanf (fp,"%d",&b);   // b is the element to be in L1(y) 
+      op->list_G2H[y][i+1]=b;
+    }  
+  }
+
+}
