@@ -21,8 +21,7 @@
 #include <unistd.h>
 #include <math.h>
 
-typedef 
-  signed char
+typedef unsigned char
 uchar;
 
 typedef struct graphdata {

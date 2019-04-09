@@ -11,6 +11,7 @@
 int run_maltsev(GRAPHS *op)
 {
   int out=pre_process(op);
+  print_pairs(op);
   if(out <1){
     print_pairs(op);
     printf("\nSome pairs are empty. No Maltsev\n\n");

@@ -26,6 +26,7 @@ void init_graphs_lists(GRAPHS *op, USER_PARAMS * ip, int read_g)
 
 void init_graph_g(GRAPHS *op, const char * file_name)
 {
+   
   FILE * fp = fopen(file_name, "r");
   if(fp == NULL){
     fprintf(stderr, "\nError opening file %s\n",file_name );
