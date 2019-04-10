@@ -22,6 +22,7 @@ typedef struct graphdata {
   int ** graph_g;
   int ** graph_h;
   int ** list_G2H; // L1 -  Vertices available in H for each V in G
+  int **** pair_list_G2H;
 
   int *degrees_g; // Degrees of each vertex in G
   int *degrees_h; // Degrees of each vertex in H
@@ -46,7 +47,11 @@ void construct_H(NEW_GRAPHS *op);
 /* construct a fixed G & H, for test porpouse */
 void contruct_fixedG_H(NEW_GRAPHS *op);
 
+/* For every cross, we complete the rectangle(Min Max) */
 void pairs_rectangles(NEW_GRAPHS *op);
+
+/* If there's a path from X to Z & there're crossing paths from the list of X to list of Z, we gotta also complete the rectangle */
+/* We are using the idea of looking backwards, to connect a path and complete the path rectangle property */
 void path_rectangles(NEW_GRAPHS *op);
 
 void save_graphs(NEW_GRAPHS *op);
@@ -60,3 +65,6 @@ void bfs(int queue[], int visited[], int front, int rear, NEW_GRAPHS *op, int ve
 
 // make a random assignment to vertice i
 void make_rand_connection(NEW_GRAPHS *op, int x);
+
+// create all pairs from G to H
+void create_pairs_G2H(NEW_GRAPHS *op);

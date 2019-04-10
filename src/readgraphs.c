@@ -166,7 +166,7 @@ void init_pair_list(GRAPHS *op)
           }
         }
       }
-    }
+    } 
   }
 
   for (x=0;x < op->num_vert_G; x++) 

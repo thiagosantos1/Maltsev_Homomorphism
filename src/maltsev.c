@@ -1,6 +1,6 @@
 /* Authors: Arash Rafiey Thiago Santos. --> https://github.com/thiagosantos1/
    Copyright (C)
-*/
+*/ 
 
  
 #include <graphs.h>  

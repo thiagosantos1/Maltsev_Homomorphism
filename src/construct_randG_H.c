@@ -9,7 +9,6 @@
 #include <math.h>
 #include <time.h>
 #include <construct_randG_H.h>
-#include <bfs_list_consistency.h>
    
 
 int main(int argc, char const *argv[])
@@ -42,14 +41,12 @@ int main(int argc, char const *argv[])
   //contruct_fixedG_H(&graphs); // uses graph G & H & list from etc - Good for testing porpouse
   bfs_Gconnected(&graphs);
 
-  BFS_DATA bfs_data;
-
-  // run bfs for list consistency
-  bfs_list_consis(&bfs_data,&graphs);
-
-
   pairs_rectangles(&graphs);
+  
+  create_pairs_G2H(&graphs);
+
   path_rectangles(&graphs);
+
   save_graphs(&graphs);
   save_list(&graphs);
   
@@ -269,6 +266,63 @@ void pairs_rectangles(NEW_GRAPHS *op)
 void path_rectangles(NEW_GRAPHS *op)
 {
 
+  int x,y,a,a_,b,b_,c_,c,d_,d,z,e,e_,rand_f,not_e;
+
+  // for every xy in V(G)
+  for(x=0; x<op->numVertG; x++){
+    for(y=0; y<op->numVertG; y++){
+
+      // for every a,b in L(x)
+      for(a_=1; a_<=op->list_G2H[x][0]; a_++){
+        a = op->list_G2H[x][a_];
+        for(b_=1; b_<=op->list_G2H[x][0]; b_++){
+          b = op->list_G2H[x][b_];
+          
+          // for every c,d in L(y)
+          for(c_=1; c_<=op->list_G2H[y][0]; c_++){
+            c = op->list_G2H[y][c_];
+            for(d_=1; d_<=op->list_G2H[y][0]; d_++){
+              d = op->list_G2H[y][d_];
+              
+              // if (a,c), (a,d), (b,c) in L(x,y)  
+              if( (op->pair_list_G2H[x][y][a][c] >0) & (op->pair_list_G2H[x][y][a][d] >0) & (op->pair_list_G2H[x][y][b][c] >0) ){
+                // if (b,d) not in L(x,y)
+                if(op->pair_list_G2H[x][y][b][d] <1){
+
+                  // for every yz in E(G)
+                  for(z=0; z<op->numVertG; z++){
+                    if( (z!= y) & (op->graph_h[y][z] >0) ){
+                      not_e = 1;
+                      for(e_=1; e_<=op->list_G2H[z][0]; e_++){
+                        e = op->list_G2H[z][e_];
+                        if( (op->pair_list_G2H[x][z][b][e] >0) & (op->graph_h[e][d] > 0) ){
+                          not_e = 0; // so there's an e. Then
+                          break;
+                        }
+                      }
+                      if(not_e >0){ //
+                        rand_f = op->list_G2H[z][(rand() % op->list_G2H[z][0]) + 1];
+                        // make 100% sure {rand_f, d} is not an edge
+                        if(op->graph_h[rand_f][d] <1){
+                          op->pair_list_G2H[x][z][b][rand_f] = 1;
+                          op->graph_h[rand_f][d] = 1;
+                          op->graph_h[d][rand_f] = 1;
+                          op->num_E_H +=2;
+                          op->degrees_h[rand_f]++;
+                          op->degrees_h[d]++;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
 }
 
 void save_graphs(NEW_GRAPHS *op)
@@ -433,4 +487,77 @@ void contruct_fixedG_H(NEW_GRAPHS *op)
     }  
   }
 
+}
+
+void create_pairs_G2H(NEW_GRAPHS *op)
+{
+  int x,y,a,b;
+  int temp_a,temp_b;
+
+  // allocate memory for pair lists 
+  op->pair_list_G2H = (int ****) malloc(op->numVertG * sizeof(int *)); 
+  for (x=0; x< op->numVertG; x++)
+    op->pair_list_G2H[x]= (int ***) malloc(op->numVertG * sizeof(int *)); 
+  
+  for (x=0; x< op->numVertG; x++)
+    for (y=0; y<op->numVertG; y++)
+      op->pair_list_G2H[x][y]=(int **) malloc(op->numVertH * sizeof(int *)); 
+  
+  for (x=0; x< op->numVertG; x++)
+    for (y=0; y<op->numVertG; y++)
+      for (a=0; a < op->numVertH; a++)
+        op->pair_list_G2H[x][y][a]=(int *) malloc(op->numVertH * sizeof(int *));
+
+  // initially everything is zero 
+  for (x=0;x < op->numVertG; x++) 
+    for (y=0; y < op->numVertG; y++)
+      for (a=0; a< op->numVertH; a++) 
+        for (b=0; b < op->numVertH; b++) 
+          op->pair_list_G2H[x][y][a][b]=0;
+
+
+  for (x=0;x < op->numVertG; x++) {
+    for (y=x+1; y < op->numVertG; y++){
+      for (a=1; a<= op->list_G2H[x][0]; a++){
+        for (b=1; b <= op->list_G2H[y][0]; b++){
+          if ( (op->list_G2H[x][a]>-1) && (op->list_G2H[y][b] > -1) ){
+            temp_a = op->list_G2H[x][a];
+            temp_b = op->list_G2H[y][b];
+            op->pair_list_G2H[x][y][temp_a][temp_b] = 1;
+            op->pair_list_G2H[y][x][temp_b][temp_a] = 1; 
+          }
+        }
+      }
+    } 
+  }
+
+  for (x=0;x < op->numVertG; x++) 
+    for (a=1; a<= op->list_G2H[x][0]; a++) 
+      if (op->list_G2H[x][a] > -1)
+        op->pair_list_G2H[x][x][op->list_G2H[x][a]][op->list_G2H[x][a]]=1; 
+
+  for (x=0;x < op->numVertG; x++){
+    for (y=0; y < op->numVertG; y++){
+
+      if (op->graph_g[x][y]==1){
+        for (a=1; a<= op->list_G2H[x][0]; a++){
+          if (op->list_G2H[x][a] > -1 ){
+            for (b=1; b <= op->list_G2H[y][0]; b++)  { 
+              temp_a=op->list_G2H[x][a];
+              temp_b=op->list_G2H[y][b];
+              if ( (op->list_G2H[y][b] >-1) && op->graph_h[temp_a][temp_b]==1){  
+                op->pair_list_G2H[x][y][temp_a][temp_b] = 1;
+                op->pair_list_G2H[y][x][temp_b][temp_a] = 1;
+              }
+              else {
+                op->pair_list_G2H[x][y][temp_a][temp_b] = 0; 
+                op->pair_list_G2H[y][x][temp_b][temp_a] = 0;
+              }
+            }
+          }
+        }
+      }
+
+    }
+  }
 }
