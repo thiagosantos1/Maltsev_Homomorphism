@@ -18,9 +18,9 @@ int main(int argc, char const *argv[])
   
   // default values
   // can pass values by argument via argv, manually or by using Makefile
-  graphs.numVertG = 5;
-  graphs.prob_edgeG = 0.5;
-  graphs.prob_edgeH = 0.5;
+  graphs.numVertG = 13;
+  graphs.prob_edgeG = 0.3;
+  graphs.prob_edgeH = 0.2;
 
   if(argc ==4){
     graphs.numVertG = atoi(argv[1]);
@@ -41,7 +41,7 @@ int main(int argc, char const *argv[])
   //contruct_fixedG_H(&graphs); // uses graph G & H & list from etc - Good for testing porpouse
   bfs_Gconnected(&graphs);
 
-  pairs_rectangles(&graphs);
+  pairs_rectangles(&graphs);  
   
   create_pairs_G2H(&graphs);
 
@@ -70,7 +70,7 @@ void construct_G(NEW_GRAPHS *op)
   // ramdmoly assign edges . No need to go over the whole matrix
   for (int i = 0; i < op->numVertG; i++){
     for (int j = 1+i; j < op->numVertG; j++){
-      if( ((float)rand() / (float)RAND_MAX) >= op->prob_edgeG ){
+      if( ((float)rand() / (float)RAND_MAX) <= op->prob_edgeG ){
         op->graph_g[i][j] = 1;
         op->graph_g[j][i] = 1;
         op->degrees_g[i]++;
@@ -133,7 +133,7 @@ void construct_H(NEW_GRAPHS *op)
           }
           for(x=1; x<=op->list_G2H[i_][0]; x++){ // All possible assign in H for vertice i_
 
-            if( (((float)rand() / (float)RAND_MAX) >= op->prob_edgeH) && sure_edge != x){
+            if( (((float)rand() / (float)RAND_MAX) <= op->prob_edgeH) && sure_edge != x){
               if(op->graph_h[op->list_G2H[i][j]][op->list_G2H[i_][x]] != 1){
                 op->graph_h[op->list_G2H[i][j]][op->list_G2H[i_][x]] = 1;
                 op->graph_h[op->list_G2H[i_][x]][op->list_G2H[i][j]] = 1;
@@ -268,48 +268,55 @@ void path_rectangles(NEW_GRAPHS *op)
 
   int x,y,a,a_,b,b_,c_,c,d_,d,z,e,e_,rand_f,not_e;
 
-  // for every xy in V(G)
-  for(x=0; x<op->numVertG; x++){
-    for(y=0; y<op->numVertG; y++){
+  int updating = 1;
 
-      // for every a,b in L(x)
-      for(a_=1; a_<=op->list_G2H[x][0]; a_++){
-        a = op->list_G2H[x][a_];
-        for(b_=1; b_<=op->list_G2H[x][0]; b_++){
-          b = op->list_G2H[x][b_];
-          
-          // for every c,d in L(y)
-          for(c_=1; c_<=op->list_G2H[y][0]; c_++){
-            c = op->list_G2H[y][c_];
-            for(d_=1; d_<=op->list_G2H[y][0]; d_++){
-              d = op->list_G2H[y][d_];
-              
-              // if (a,c), (a,d), (b,c) in L(x,y)  
-              if( (op->pair_list_G2H[x][y][a][c] >0) & (op->pair_list_G2H[x][y][a][d] >0) & (op->pair_list_G2H[x][y][b][c] >0) ){
-                // if (b,d) not in L(x,y)
-                if(op->pair_list_G2H[x][y][b][d] <1){
+  // by adding and edge, it may create another crossing problem. Make sure to check it
+  while( updating >0){
+    updating = 0;
+    // for every xy in V(G)
+    for(x=0; x<op->numVertG; x++){
+      for(y=0; y<op->numVertG; y++){
 
-                  // for every yz in E(G)
-                  for(z=0; z<op->numVertG; z++){
-                    if( (z!= y) & (op->graph_h[y][z] >0) ){
-                      not_e = 1;
-                      for(e_=1; e_<=op->list_G2H[z][0]; e_++){
-                        e = op->list_G2H[z][e_];
-                        if( (op->pair_list_G2H[x][z][b][e] >0) & (op->graph_h[e][d] > 0) ){
-                          not_e = 0; // so there's an e. Then
-                          break;
+        // for every a,b in L(x)
+        for(a_=1; a_<=op->list_G2H[x][0]; a_++){
+          a = op->list_G2H[x][a_];
+          for(b_=1; b_<=op->list_G2H[x][0]; b_++){
+            b = op->list_G2H[x][b_];
+            
+            // for every c,d in L(y)
+            for(c_=1; c_<=op->list_G2H[y][0]; c_++){
+              c = op->list_G2H[y][c_];
+              for(d_=1; d_<=op->list_G2H[y][0]; d_++){
+                d = op->list_G2H[y][d_];
+                
+                // if (a,c), (a,d), (b,c) in L(x,y)  
+                if( (op->pair_list_G2H[x][y][a][c] >0) & (op->pair_list_G2H[x][y][a][d] >0) & (op->pair_list_G2H[x][y][b][c] >0) ){
+                  // if (b,d) not in L(x,y)
+                  if(op->pair_list_G2H[x][y][b][d] <1){
+
+                    // for every yz in E(G)
+                    for(z=0; z<op->numVertG; z++){
+                      if( (z!= y) & (op->graph_h[y][z] >0) ){
+                        not_e = 1;
+                        for(e_=1; e_<=op->list_G2H[z][0]; e_++){
+                          e = op->list_G2H[z][e_];
+                          if( (op->pair_list_G2H[x][z][b][e] >0) & (op->graph_h[e][d] > 0) ){
+                            not_e = 0; // so there's an e. Then
+                            break;
+                          }
                         }
-                      }
-                      if(not_e >0){ //
-                        rand_f = op->list_G2H[z][(rand() % op->list_G2H[z][0]) + 1];
-                        // make 100% sure {rand_f, d} is not an edge
-                        if(op->graph_h[rand_f][d] <1){
-                          op->pair_list_G2H[x][z][b][rand_f] = 1;
-                          op->graph_h[rand_f][d] = 1;
-                          op->graph_h[d][rand_f] = 1;
-                          op->num_E_H +=2;
-                          op->degrees_h[rand_f]++;
-                          op->degrees_h[d]++;
+                        if(not_e >0){ //
+                          rand_f = op->list_G2H[z][(rand() % op->list_G2H[z][0]) + 1];
+                          // make 100% sure {rand_f, d} is not an edge
+                          if(op->graph_h[rand_f][d] <1){
+                            op->pair_list_G2H[x][z][b][rand_f] = 1;
+                            op->graph_h[rand_f][d] = 1;
+                            op->graph_h[d][rand_f] = 1;
+                            op->num_E_H +=2;
+                            op->degrees_h[rand_f]++;
+                            op->degrees_h[d]++;
+                            updating = 1;
+                          }
                         }
                       }
                     }
