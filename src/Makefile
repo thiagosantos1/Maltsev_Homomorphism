@@ -1,7 +1,7 @@
 CC     = gcc -lm
 HDR1   = ../include/graphs.h
 OPT    = -g -Wall
-CFLAGS = -c -I../include
+CFLAGS = -c -I../include 
 OBJS   = readgraphs.o 
 
 all: maltsev_run construct_G_H
