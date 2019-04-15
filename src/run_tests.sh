@@ -22,7 +22,7 @@ if [ ! -d $SAVE_IN ]; then
 fi
 
 #graphs_g=(6 7 8 9 10 11 12 13 14 15 20 25 30)
-graphs_g=(6 7 8)
+graphs_g=(6 7 8 9)
 
 # make sure to have the right binary files 
 make clean
@@ -48,7 +48,7 @@ do
     cp "../etc/graph_H_out.txt" "$folder_2save/"
     cp "../etc/graph_G_out.txt" "$folder_2save/"
 
-    make run G="../etc/graph_G_out.txt" H="../etc/graph_H_out.txt" L="../etc/list_file_out.txt" > "$folder_2save/results.txt"
+    make run G="$folder_2save/graph_G_out.txt" H="$folder_2save/graph_H_out.txt" L="$folder_2save/list_file_out.txt" > "$folder_2save/results.txt"
   done
 
 done
