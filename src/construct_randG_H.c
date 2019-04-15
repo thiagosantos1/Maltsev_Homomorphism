@@ -18,9 +18,10 @@ int main(int argc, char const *argv[])
   
   // default values
   // can pass values by argument via argv, manually or by using Makefile
-  graphs.numVertG = 13;
+  graphs.numVertG = 6;
   graphs.prob_edgeG = 0.3;
   graphs.prob_edgeH = 0.2;
+  graphs.max_list_size = 16;
 
   if(argc ==4){
     graphs.numVertG = atoi(argv[1]);
@@ -84,6 +85,9 @@ void construct_G(NEW_GRAPHS *op)
 void construct_H(NEW_GRAPHS *op)
 {
 
+  op->degress_G2H = malloc(op->numVertG * sizeof(int));
+  memset(op->degress_G2H,0,op->numVertG * sizeof(int));
+
   // calculate size of H
   // For this implementation, we are using the sum of (2 to the degree of each vertex)
   op->num_E_H  = 0;
@@ -92,8 +96,10 @@ void construct_H(NEW_GRAPHS *op)
   int degree, last_vert = 0, i, i_, x, j;
   for(i =0; i<op->numVertG; i++){
     degree = (int) pow(2,op->degrees_g[i] );
+    degree = degree > op->max_list_size ? op->max_list_size:degree;
     max_degree = degree > max_degree ? degree:max_degree;
     op->numVertH += degree;
+    op->degress_G2H[i] = degree;
   }
 
   // each vertex of G is "assign" in H 2 to the power of degree of that vertice
@@ -101,7 +107,7 @@ void construct_H(NEW_GRAPHS *op)
   for(i=0; i<op->numVertG; i++){
     // +1 because one position is to how many vertices for that g
     op->list_G2H[i] = malloc( (max_degree +1 ) * sizeof(int) ); 
-    op->list_G2H[i][0] = (int) pow(2,op->degrees_g[i]);
+    op->list_G2H[i][0] = op->degress_G2H[i];
     for(x=1; x<=op->list_G2H[i][0]; x++){
       op->list_G2H[i][x] = last_vert;
       last_vert++;

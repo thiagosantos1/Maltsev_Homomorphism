@@ -27,11 +27,15 @@ typedef struct graphdata {
   int *degrees_g; // Degrees of each vertex in G
   int *degrees_h; // Degrees of each vertex in H
 
+  int *degress_G2H; // save the size of list of x, for every x in G
+
   int numVertG;
   int numVertH;
 
   int num_E_G; // Number of edges in G
   int num_E_H; // Number of edges in H
+
+  int max_list_size; // Maximum size of list(x). Reduce then time complexity
 
   float prob_edgeG;
   float prob_edgeH;
