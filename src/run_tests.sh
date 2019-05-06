@@ -21,8 +21,9 @@ if [ ! -d $SAVE_IN ]; then
   exit $E_BADARGS
 fi
 
-#graphs_g=(6 7 8 9 10 11 12 13 14 15 20 25 30)
-graphs_g=(100 200)
+#graphs_g=(5 7 8 9 10 11 12 13 14 15 20 25 30)
+graphs_g=(5)
+#graphs_g=(100 200)
 
 # make sure to have the right binary files 
 make clean

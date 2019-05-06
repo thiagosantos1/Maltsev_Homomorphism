@@ -1,1 +1,0 @@
-../bin/./maltsev_run $G $H $L
