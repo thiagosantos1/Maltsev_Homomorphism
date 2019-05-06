@@ -21,7 +21,7 @@ int main(int argc, char const *argv[])
   graphs.numVertG = 6;
   graphs.prob_edgeG = 0.3;
   graphs.prob_edgeH = 0.2;
-  graphs.max_list_size = 16;
+  graphs.max_list_size = 8;
 
   if(argc ==4){
     graphs.numVertG = atoi(argv[1]);
@@ -39,6 +39,7 @@ int main(int argc, char const *argv[])
 
   construct_G(&graphs);
   construct_H(&graphs);
+
   //contruct_fixedG_H(&graphs); // uses graph G & H & list from etc - Good for testing porpouse
   bfs_Gconnected(&graphs);
 
@@ -88,6 +89,7 @@ void construct_H(NEW_GRAPHS *op)
   op->degress_G2H = malloc(op->numVertG * sizeof(int));
   memset(op->degress_G2H,0,op->numVertG * sizeof(int));
 
+
   // calculate size of H
   // For this implementation, we are using the sum of (2 to the degree of each vertex)
   op->num_E_H  = 0;
@@ -95,12 +97,17 @@ void construct_H(NEW_GRAPHS *op)
   int max_degree = 0; // Used to then create the size of matrix H(save space)
   int degree, last_vert = 0, i, i_, x, j;
   for(i =0; i<op->numVertG; i++){
-    degree = (int) pow(2,op->degrees_g[i] );
+    if(op->degrees_g[i] < 12 )
+      degree = (int) pow(2,op->degrees_g[i] );
+    else
+      degree = op->max_list_size;
+
     degree = degree > op->max_list_size ? op->max_list_size:degree;
     max_degree = degree > max_degree ? degree:max_degree;
     op->numVertH += degree;
     op->degress_G2H[i] = degree;
   }
+  
 
   // each vertex of G is "assign" in H 2 to the power of degree of that vertice
   op->list_G2H = malloc(op->numVertG * sizeof(int * ));

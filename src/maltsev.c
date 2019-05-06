@@ -214,32 +214,49 @@ void arc_consistency_dis(GRAPHS *op)
   int f,g,i_f,i_g,l,i_l,flag1,ind; 
    
   for (x=0; x < op->num_vert_G; x++){
-    for (a=0; a < op->list_G2H[x][0]; a++){
-      for (b=0; b < op->list_G2H[x][0]; b++){
-        for (c=0; c < op->list_G2H[x][0]; c++){
+ 
+    for (y=0; y < op->num_vert_G; y++){  
+      if ( y != x){
+        for (a=0; a < op->list_G2H[x][0]; a++){
           i_a=op->list_G2H[x][a+1]; 
-          i_b=op->list_G2H[x][b+1]; 
-          i_c=op->list_G2H[x][c+1]; 
-          if (op->list_G2H[x][a+1] > -1 && op->list_G2H[x][b+1] > -1 && op->list_G2H[x][c+1] > -1 ){    
-            for (d=1; d <=op->distinguisher[x][a][b][c][0]; d++ ){
-              ind=  op->distinguisher[x][a][b][c][d];
-              if ( ind > -1 ){      
-                for (y=0; y < op->num_vert_G; y++){  
-                  if ( y != x){
-                    for (e =0; e < op->list_G2H[y][0]; e++){
+          if (i_a > -1 ) {
+            for (e =0; e < op->list_G2H[y][0]; e++){ 
+              i_e=op->list_G2H[y][e+1];
+              if ( i_e > -1) {        
+                if (op->pair_list_G2H[x][y][i_a][i_e] ){
+                  for (b=0; b < op->list_G2H[x][0]; b++){
+                    i_b=op->list_G2H[x][b+1];
+                    if ( i_b > -1)  {
                       for (f =0; f < op->list_G2H[y][0]; f++){
-                        for (g =0; g < op->list_G2H[y][0]; g++){
-                          i_e=op->list_G2H[y][e+1]; i_f=op->list_G2H[y][f+1]; i_g=op->list_G2H[y][g+1];
-                          if (op->list_G2H[y][e+1] > -1 && op->list_G2H[y][f+1] > -1 && op->list_G2H[y][g+1] > -1 ){
-                            if (op->pair_list_G2H[x][y][i_a][i_e] && op->pair_list_G2H[x][y][i_b][i_f] && op->pair_list_G2H[x][y][i_c][i_g]){
-                              flag1=0;                      
-                              for ( l=1; l <= op->distinguisher[y][e][f][g][0]; l++){
-                                i_l=op->distinguisher[y][e][f][g][l];
-                                if ( i_l > -1 && op->pair_list_G2H[x][y][ind][i_l])   
-                                  flag1=1; 
+                        i_f=op->list_G2H[y][f+1];
+                        if ( i_f > -1)  {
+                   
+                          if (op->pair_list_G2H[x][y][i_b][i_f] ) {
+                      
+                            for (c=0; c < op->list_G2H[x][0]; c++){
+                              i_c=op->list_G2H[x][c+1]; 
+                              if (i_c > -1) { 
+                           
+                                for (g =0; g < op->list_G2H[y][0]; g++){
+                                  i_g=op->list_G2H[y][g+1];
+                                  if ( i_g > -1) {
+                                    if (op->pair_list_G2H[x][y][i_c][i_g] ) {
+                                      flag1=0; 
+                                      for (d=1; d <=op->distinguisher[x][a][b][c][0] && ! flag1 ; d++ ){
+                                        ind=  op->distinguisher[x][a][b][c][d];
+                                                     
+                                        for ( l=1; l <= op->distinguisher[y][e][f][g][0]; l++){
+                                          i_l=op->distinguisher[y][e][f][g][l];
+                                          if ( i_l > -1 && op->pair_list_G2H[x][y][ind][i_l])   
+                                            flag1=1; 
+                                        }
+                                        if (!flag1) 
+                                          op->distinguisher[x][a][b][c][d]=-1;
+                                      }
+                                    }
+                                  }
+                                }
                               }
-                              if (!flag1) 
-                                op->distinguisher[x][a][b][c][d]=-1;
                             }
                           }
                         }
@@ -254,8 +271,8 @@ void arc_consistency_dis(GRAPHS *op)
       }
     }
   }
-
 }
+
 
 void run_distinguisher(GRAPHS *op)
 {
