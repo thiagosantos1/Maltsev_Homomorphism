@@ -22,8 +22,8 @@ if [ ! -d $SAVE_IN ]; then
 fi
 
 #graphs_g=(5 7 8 9 10 11 12 13 14 15 20 25 30)
-graphs_g=(5)
-#graphs_g=(100 200)
+#graphs_g=(7 8)
+graphs_g=(100 150)
 
 # make sure to have the right binary files 
 make clean
